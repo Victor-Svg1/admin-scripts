@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Central de Scripts PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F0F2F5;--surface:#fff;--surface2:#F4F6F9;--border:#E2E5EC;
+  --text:#111827;--text2:#4B5563;--text3:#9CA3AF;
+  --wa:#25D366;--wa-l:rgba(37,211,102,.1);--wa-dark:#128C4A;
+  --red:#EF4444;--red-l:#FEF2F2;--amber:#F59E0B;--amber-l:#FFFBEB;
+  --blue:#3B82F6;--blue-l:#EFF6FF;
+  --shadow:0 1px 4px rgba(0,0,0,.07),0 4px 12px rgba(0,0,0,.05);
+  --r:10px;--font:'Plus Jakarta Sans',sans-serif;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px}
+button{cursor:pointer;font-family:var(--font);transition:all .15s}
+input,select,textarea{font-family:var(--font)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#D1D5DB;border-radius:3px}
+
+/* LOGIN */
+#login{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.lc{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:36px;width:100%;max-width:380px;box-shadow:var(--shadow)}
+.lc-top{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.lc-ico{width:38px;height:38px;background:#0A2E1E;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.lc-title{font-size:18px;font-weight:800}
+.lc-badge{font-size:9px;font-weight:800;background:var(--red);color:#fff;padding:2px 7px;border-radius:12px}
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-bottom:5px}
+.fi{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--text);background:var(--surface2);outline:none}
+.fi:focus{border-color:#3B82F6}
+.btn-login{width:100%;background:#0A2E1E;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;margin-top:4px}
+.btn-login:hover{background:#1A5C35}
+
+/* APP */
+#app{height:100vh;display:none;flex-direction:column}
+#app.show{display:flex}
+
+/* TOPBAR */
+.tb{height:52px;min-height:52px;background:#0A2E1E;display:flex;align-items:center;padding:0 20px;gap:16px}
+.tb-logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#fff}
+.tb-logo-ico{width:28px;height:28px;background:var(--wa);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.tb-badge{font-size:9px;font-weight:800;background:var(--red);color:#fff;padding:2px 7px;border-radius:12px}
+.tb-spacer{flex:1}
+.tb-user{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.7)}
+.tb-avatar{width:28px;height:28px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#000}
+.btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);border-radius:7px;padding:5px 12px;font-size:12px}
+.btn-logout:hover{background:rgba(255,255,255,.2)}
+
+/* LAYOUT */
+.layout{flex:1;display:flex;overflow:hidden;min-height:0}
+
+/* SIDEBAR */
+.sb{width:210px;min-width:210px;background:#0D1F15;overflow-y:auto;padding:12px 0}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.55);cursor:pointer;border-left:2px solid transparent;transition:all .15s}
+.sb-item:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.05)}
+.sb-item.active{color:#fff;border-left-color:var(--wa);background:rgba(37,211,102,.08);font-weight:600}
+.sb-item .icon{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.sb-section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:12px 16px 4px}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:24px}
+.page-title{font-size:18px;font-weight:800;margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.stat-val{font-size:28px;font-weight:800;margin-bottom:4px}
+.stat-lbl{font-size:12px;color:var(--text2)}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border)}
+td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:middle}
+tr:hover td{background:var(--surface2)}
+td strong{color:var(--text)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.badge-green{background:var(--wa-l);color:var(--wa-dark)}
+.badge-red{background:var(--red-l);color:var(--red)}
+.badge-amber{background:var(--amber-l);color:#92400E}
+.badge-blue{background:var(--blue-l);color:#1E40AF}
+
+/* BUTTONS */
+.btn{border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;transition:all .15s}
+.btn-primary{background:var(--wa);color:#000}
+.btn-primary:hover{background:#2DE070}
+.btn-danger{background:var(--red-l);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text2)}
+.btn-outline:hover{border-color:var(--border);background:var(--surface2);color:var(--text)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-dark{background:#0A2E1E;color:#fff}
+.btn-dark:hover{background:#1A5C35}
+
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-bottom:5px}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;color:var(--text);background:var(--surface2);outline:none}
+.form-input:focus{border-color:var(--blue);background:var(--surface)}
+.form-select{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;color:var(--text);background:var(--surface2);outline:none}
+.form-textarea{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;color:var(--text);background:var(--surface2);outline:none;min-height:100px;resize:vertical}
+.form-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.4);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.show{display:flex}
+.modal-inner{background:var(--surface);border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
+.modal-title{font-size:16px;font-weight:700}
+.modal-close{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface2);font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+.modal-close:hover{background:var(--red-l);color:var(--red);border-color:var(--red)}
+.modal-body{padding:24px}
+
+/* SEARCH */
+.search-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-input{flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px 9px 36px;font-size:13px;color:var(--text);background:var(--surface);outline:none;position:relative}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none}
+.search-wrap input{width:100%;padding-left:33px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;border-radius:10px;padding:11px 18px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(80px);transition:transform .22s cubic-bezier(.4,0,.2,1)}
+.toast.show{transform:translateY(0)}
+
+/* TOGGLE */
+.toggle{position:relative;width:38px;height:21px;background:#D1D5DB;border-radius:11px;cursor:pointer;transition:all .15s}
+.toggle.on{background:var(--wa)}
+.toggle::after{content:'';position:absolute;width:15px;height:15px;border-radius:50%;background:#fff;top:3px;left:3px;transition:all .15s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle.on::after{left:20px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp .2s ease both}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lc">
+    <div class="lc-top">
+      <div class="lc-ico">🛡️</div>
+      <div>
+        <span class="lc-title">Painel Admin</span>
+        <span class="lc-badge">ADMIN</span>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Central de Scripts PRO — Acesso restrito</div>
+    <div class="fg"><label class="fl">E-mail</label><input class="fi" type="email" id="a-email" placeholder="admin@email.com"></div>
+    <div class="fg"><label class="fl">Senha</label><input class="fi" type="password" id="a-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
+    <button class="btn-login" onclick="doAdminLogin()">Entrar como administrador</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="tb">
+    <div class="tb-logo">
+      <div class="tb-logo-ico">💬</div>
+      Central de Scripts
+      <span class="tb-badge">ADMIN</span>
+    </div>
+    <div class="tb-spacer"></div>
+    <div class="tb-user">
+      <div class="tb-avatar" id="adm-avatar">A</div>
+      <span id="adm-name">Admin</span>
+    </div>
+    <button class="btn-logout" onclick="logout()">Sair</button>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <div class="sb">
+      <div class="sb-section-label">Principal</div>
+      <div class="sb-item active" data-tab="dashboard" onclick="goTab('dashboard',this)"><span class="icon">📊</span> Dashboard</div>
+      <div class="sb-item" data-tab="users" onclick="goTab('users',this)"><span class="icon">👥</span> Usuários</div>
+      <div class="sb-item" data-tab="scripts" onclick="goTab('scripts',this)"><span class="icon">📋</span> Scripts</div>
+      <div class="sb-section-label">Análise</div>
+      <div class="sb-item" data-tab="metrics" onclick="goTab('metrics',this)"><span class="icon">📈</span> Métricas</div>
+      <div class="sb-item" data-tab="webhooks" onclick="goTab('webhooks',this)"><span class="icon">🔗</span> Webhooks</div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main" id="mainContent"></div>
+  </div>
+</div>
+
+<!-- MODAL: usuário -->
+<div class="modal" id="userModal" onclick="if(event.target===this)closeModal('userModal')">
+  <div class="modal-inner">
+    <div class="modal-head">
+      <div class="modal-title" id="userModalTitle">Editar usuário</div>
+      <button class="modal-close" onclick="closeModal('userModal')">✕</button>
+    </div>
+    <div class="modal-body" id="userModalBody"></div>
+  </div>
+</div>
+
+<!-- MODAL: script -->
+<div class="modal" id="scriptModal" onclick="if(event.target===this)closeModal('scriptModal')">
+  <div class="modal-inner">
+    <div class="modal-head">
+      <div class="modal-title" id="scriptModalTitle">Novo script</div>
+      <button class="modal-close" onclick="closeModal('scriptModal')">✕</button>
+    </div>
+    <div class="modal-body" id="scriptModalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════
+const API = 'https://central-scripts-backend-production.up.railway.app'; // ← Troque pela URL do seu backend
+let TOKEN = localStorage.getItem('adm_token') || '';
+let CURRENT_TAB = 'dashboard';
+
+// ═══════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════
+async function doAdminLogin() {
+  const email = document.getElementById('a-email').value.trim();
+  const pass  = document.getElementById('a-pass').value;
+  if (!email || !pass) return showToast('Preencha email e senha');
+
+  try {
+    const res  = await apiFetch('/auth/admin-login', 'POST', { email, password: pass }, false);
+    TOKEN      = res.token;
+    localStorage.setItem('adm_token', TOKEN);
+    document.getElementById('adm-name').textContent   = res.admin.name;
+    document.getElementById('adm-avatar').textContent = (res.admin.name||'A')[0].toUpperCase();
+    document.getElementById('login').style.display    = 'none';
+    document.getElementById('app').classList.add('show');
+    goTab('dashboard');
+  } catch (err) {
+    showToast('❌ ' + (err.message || 'Credenciais inválidas'));
+  }
+}
+
+function logout() {
+  TOKEN = ''; localStorage.removeItem('adm_token');
+  document.getElementById('app').classList.remove('show');
+  document.getElementById('login').style.display = 'flex';
+}
+
+// Auto-login se tiver token
+if (TOKEN) {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').classList.add('show');
+  setTimeout(() => goTab('dashboard'), 0);
+}
+
+// ═══════════════════════════════════════
+// API HELPER
+// ═══════════════════════════════════════
+async function apiFetch(path, method = 'GET', body = null, auth = true) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (auth) headers['Authorization'] = 'Bearer ' + TOKEN;
+
+  const res = await fetch(API + path, {
+    method, headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  if (res.status === 401) { logout(); throw new Error('Sessão expirada'); }
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Erro na requisição');
+  return data;
+}
+
+// ═══════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════
+function goTab(tab, el) {
+  CURRENT_TAB = tab;
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  const active = el || document.querySelector(`.sb-item[data-tab="${tab}"]`);
+  if (active) active.classList.add('active');
+  renderTab(tab);
+}
+
+async function renderTab(tab) {
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text3)">Carregando...</div>';
+
+  try {
+    if (tab === 'dashboard') await renderDashboard(main);
+    else if (tab === 'users')   await renderUsers(main);
+    else if (tab === 'scripts') await renderScripts(main);
+    else if (tab === 'metrics') await renderMetrics(main);
+    else if (tab === 'webhooks')await renderWebhooks(main);
+  } catch (err) {
+    main.innerHTML = `<div style="padding:40px;color:var(--red)">${err.message}</div>`;
+  }
+}
+
+// ═══════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════
+async function renderDashboard(main) {
+  const data = await apiFetch('/admin/dashboard');
+  const { stats, byPlan, recentUsers, topScripts } = data;
+
+  const planColors = { monthly:'var(--blue)', annual:'var(--wa)', lifetime:'var(--amber)', essencial:'var(--text3)' };
+
+  main.innerHTML = `
+    <div class="fade-in">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub">Visão geral da plataforma em tempo real</div>
+
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-val" style="color:var(--wa)">${stats.activeUsers}</div><div class="stat-lbl">Usuários ativos</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--blue)">${stats.totalUsers}</div><div class="stat-lbl">Total de usuários</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--amber)">${stats.totalCopies||0}</div><div class="stat-lbl">Scripts copiados</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--text2)">${stats.totalScripts}</div><div class="stat-lbl">Scripts ativos</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Usuários por plano</div>
+          ${Object.entries(byPlan||{}).map(([plan,count])=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span style="font-size:13px;font-weight:600;color:${planColors[plan]||'var(--text)'}">${plan}</span>
+              <span class="badge badge-blue">${count} usuários</span>
+            </div>`).join('')||'<div style="color:var(--text3);font-size:13px">Sem dados</div>'}
+        </div>
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Scripts mais copiados</div>
+          ${(topScripts||[]).map((s,i)=>`
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span style="font-size:12px;font-weight:800;color:var(--text3);min-width:18px">${i+1}</span>
+              <span style="flex:1;font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.sit}</span>
+              <span class="badge badge-green">${s.total_copies} cópias</span>
+            </div>`).join('')||'<div style="color:var(--text3);font-size:13px">Sem dados</div>'}
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px">Usuários recentes</div>
+        <table><thead><tr><th>Email</th><th>Nome</th><th>Plano</th><th>Cadastro</th><th>Status</th><th></th></tr></thead>
+        <tbody>${(recentUsers||[]).map(u=>`
+          <tr>
+            <td>${u.email}</td>
+            <td><strong>${u.name||'—'}</strong></td>
+            <td><span class="badge badge-blue">${u.plan_type}</span></td>
+            <td>${new Date(u.created_at).toLocaleDateString('pt-BR')}</td>
+            <td><span class="badge ${u.active?'badge-green':'badge-red'}">${u.active?'Ativo':'Inativo'}</span></td>
+            <td><button class="btn btn-outline btn-sm" onclick="openUserModal('${u.id}')">Editar</button></td>
+          </tr>`).join('')}</tbody></table>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════
+// USERS
+// ═══════════════════════════════════════
+async function renderUsers(main, search = '', plan = '', active = '') {
+  const params = new URLSearchParams({ limit: 100 });
+  if (search) params.set('search', search);
+  if (plan)   params.set('plan', plan);
+  if (active) params.set('active', active);
+
+  const { users } = await apiFetch('/admin/users?' + params);
+
+  main.innerHTML = `
+    <div class="fade-in">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="page-title">Usuários <span style="font-size:14px;font-weight:500;color:var(--text3)">(${users.length})</span></div>
+        <button class="btn btn-dark" onclick="openCreateUserModal()">+ Novo usuário</button>
+      </div>
+      <div class="page-sub">Gerencie acessos, planos e dados dos clientes</div>
+
+      <div class="search-bar">
+        <div class="search-wrap" style="flex:1;max-width:360px">
+          <span class="search-icon">🔍</span>
+          <input class="form-input" id="user-search" placeholder="Buscar por email ou nome..." oninput="debounce(()=>renderUsers(document.getElementById('mainContent'),this.value,document.getElementById('plan-filter').value),400)">
+        </div>
+        <select class="form-select" id="plan-filter" style="width:140px" onchange="renderUsers(document.getElementById('mainContent'),document.getElementById('user-search').value,this.value)">
+          <option value="">Todos os planos</option>
+          <option value="monthly">Mensal</option>
+          <option value="annual">Anual</option>
+          <option value="lifetime">Vitalício</option>
+          <option value="essencial">Essencial</option>
+        </select>
+      </div>
+
+      <div class="card tbl-wrap">
+        <table><thead><tr><th>Email</th><th>Nome</th><th>Plano</th><th>Favoritos</th><th>Cópias</th><th>Último acesso</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody>${users.map(u=>`
+          <tr>
+            <td>${u.email}</td>
+            <td><strong>${u.name||'—'}</strong><br><span style="font-size:11px;color:var(--text3)">${u.biz_name||''}</span></td>
+            <td><span class="badge badge-blue">${u.plan_type}</span>${u.temp_password?'<br><span class="badge badge-amber" style="margin-top:3px">Senha temp.</span>':''}</td>
+            <td>${u.total_favorites||0}</td>
+            <td>${u.total_copies||0}</td>
+            <td style="font-size:12px">${u.last_login?new Date(u.last_login).toLocaleDateString('pt-BR'):'—'}</td>
+            <td><span class="badge ${u.active?'badge-green':'badge-red'}">${u.active?'Ativo':'Inativo'}</span></td>
+            <td>
+              <div style="display:flex;gap:5px">
+                <button class="btn btn-outline btn-sm" onclick="openUserModal('${u.id}')">Editar</button>
+                <button class="btn btn-sm ${u.active?'btn-danger':'btn-primary'}" onclick="toggleUser('${u.id}',${u.active})">${u.active?'Desativar':'Ativar'}</button>
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>`;
+}
+
+async function openUserModal(id) {
+  const user = await apiFetch('/admin/users/' + id);
+  document.getElementById('userModalTitle').textContent = 'Editar usuário';
+  document.getElementById('userModalBody').innerHTML = `
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nome</label><input class="form-input" id="um-name" value="${user.name||''}"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="${user.email}" disabled style="opacity:.6"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Plano</label>
+        <select class="form-select" id="um-plan">
+          ${['monthly','annual','lifetime','essencial'].map(p=>`<option value="${p}"${user.plan_type===p?' selected':''}>${p}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Expira em</label><input class="form-input" type="date" id="um-expires" value="${user.plan_expires||''}"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Nome do negócio</label><input class="form-input" id="um-biz" value="${user.biz_name||''}"></div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-bottom:8px">
+      <strong>Cópias:</strong> ${user.total_copies||0} &nbsp;|&nbsp;
+      <strong>Favoritos:</strong> ${user.total_favorites||0} &nbsp;|&nbsp;
+      <strong>Coleções:</strong> ${user.total_collections||0} &nbsp;|&nbsp;
+      <strong>Último acesso:</strong> ${user.last_login?new Date(user.last_login).toLocaleString('pt-BR'):'Nunca'}
+    </div>
+    <div class="form-footer">
+      <button class="btn btn-outline" onclick="resetUserPassword('${id}')">🔐 Resetar senha</button>
+      <button class="btn btn-danger" onclick="toggleUser('${id}',${user.active});closeModal('userModal')">${user.active?'Desativar':'Ativar'} acesso</button>
+      <button class="btn btn-primary" onclick="saveUser('${id}')">Salvar alterações</button>
+    </div>`;
+  document.getElementById('userModal').classList.add('show');
+}
+
+async function saveUser(id) {
+  await apiFetch('/admin/users/' + id, 'PATCH', {
+    name:        document.getElementById('um-name').value,
+    biz_name:    document.getElementById('um-biz').value,
+    plan_type:   document.getElementById('um-plan').value,
+    plan_expires:document.getElementById('um-expires').value || null,
+  });
+  closeModal('userModal');
+  showToast('✅ Usuário atualizado!');
+  renderTab(CURRENT_TAB);
+}
+
+async function toggleUser(id, currentActive) {
+  await apiFetch('/admin/users/' + id, 'PATCH', { active: !currentActive });
+  showToast(currentActive ? '🔒 Acesso desativado' : '✅ Acesso ativado');
+  renderTab(CURRENT_TAB);
+}
+
+async function resetUserPassword(id) {
+  if (!confirm('Enviar email com nova senha temporária para este usuário?')) return;
+  await apiFetch('/admin/users/' + id + '/reset-password', 'POST');
+  showToast('📧 Email de reset enviado!');
+}
+
+function openCreateUserModal() {
+  document.getElementById('userModalTitle').textContent = 'Criar usuário manualmente';
+  document.getElementById('userModalBody').innerHTML = `
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="cu-email" placeholder="cliente@email.com"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nome</label><input class="form-input" id="cu-name" placeholder="Nome do cliente"></div>
+      <div class="form-group"><label class="form-label">Plano</label>
+        <select class="form-select" id="cu-plan">
+          ${['monthly','annual','lifetime','essencial'].map(p=>`<option value="${p}">${p}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div style="background:var(--blue-l);border-radius:8px;padding:12px;font-size:12px;color:#1E40AF;margin-bottom:8px">
+      ℹ️ O cliente receberá um email com a senha temporária automaticamente.
+    </div>
+    <div class="form-footer">
+      <button class="btn btn-outline" onclick="closeModal('userModal')">Cancelar</button>
+      <button class="btn btn-primary" onclick="createUser()">Criar e enviar email</button>
+    </div>`;
+  document.getElementById('userModal').classList.add('show');
+}
+
+async function createUser() {
+  const email = document.getElementById('cu-email').value;
+  const name  = document.getElementById('cu-name').value;
+  const plan  = document.getElementById('cu-plan').value;
+  if (!email) return showToast('Email obrigatório');
+  await apiFetch('/admin/users', 'POST', { email, name, plan_type: plan });
+  closeModal('userModal');
+  showToast('✅ Usuário criado e email enviado!');
+  renderTab(CURRENT_TAB);
+}
+
+// ═══════════════════════════════════════
+// SCRIPTS
+// ═══════════════════════════════════════
+async function renderScripts(main) {
+  const { scripts } = await apiFetch('/admin/scripts');
+
+  main.innerHTML = `
+    <div class="fade-in">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="page-title">Scripts <span style="font-size:14px;font-weight:500;color:var(--text3)">(${scripts.length})</span></div>
+        <button class="btn btn-dark" onclick="openScriptModal()">+ Novo script</button>
+      </div>
+      <div class="page-sub">Adicione, edite e desative scripts em tempo real — aparecem para todos os usuários instantaneamente</div>
+      <div class="card tbl-wrap">
+        <table><thead><tr><th>ID</th><th>Etapa</th><th>Nicho</th><th>Situação</th><th>Cópias</th><th>👍</th><th>👎</th><th>Destaque</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody>${scripts.map(s=>`
+          <tr>
+            <td><code style="font-size:11px">${s.id}</code></td>
+            <td><span class="badge badge-blue">${s.etapa}</span></td>
+            <td style="font-size:12px">${s.nicho}</td>
+            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><strong>${s.sit}</strong></td>
+            <td>${s.total_copies||0}</td>
+            <td style="color:var(--wa)">${s.thumbs_up||0}</td>
+            <td style="color:var(--red)">${s.thumbs_down||0}</td>
+            <td><div class="toggle${s.featured?' on':''}" onclick="toggleFeatured('${s.id}',${s.featured})"></div></td>
+            <td><span class="badge ${s.active?'badge-green':'badge-red'}">${s.active?'Ativo':'Inativo'}</span></td>
+            <td>
+              <div style="display:flex;gap:5px">
+                <button class="btn btn-outline btn-sm" onclick="openScriptModal('${s.id}')">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="toggleScript('${s.id}',${s.active})">${s.active?'Ocultar':'Ativar'}</button>
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>`;
+}
+
+async function openScriptModal(id = null) {
+  let script = null;
+  if (id) script = await apiFetch('/admin/scripts').then(d => d.scripts.find(s => s.id === id));
+
+  document.getElementById('scriptModalTitle').textContent = id ? 'Editar script' : 'Novo script';
+  document.getElementById('scriptModalBody').innerHTML = `
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">ID único</label><input class="form-input" id="sm-id" value="${script?.id||''}" placeholder="Ex: D10" ${id?'disabled style="opacity:.6"':''}></div>
+      <div class="form-group"><label class="form-label">Etapa</label>
+        <select class="form-select" id="sm-etapa">
+          ${['Abertura','Qualificação','Apresentação','Objeção','Fechamento','Pós-venda','Reativação','Stories/Status'].map(e=>`<option ${script?.etapa===e?'selected':''}>${e}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Nicho</label>
+      <select class="form-select" id="sm-nicho">
+        ${['Todos','Delivery','Salão de Beleza','Clínica','Loja de Roupas','Imobiliária','Serviços','Vendas Online','Revendedor'].map(n=>`<option ${script?.nicho===n?'selected':''}>${n}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Situação (título do script)</label><input class="form-input" id="sm-sit" value="${script?.sit||''}" placeholder="Ex: Cliente diz tá caro"></div>
+    <div class="form-group"><label class="form-label">Mensagem — use *texto* para negrito</label><textarea class="form-textarea" id="sm-msg" style="min-height:140px">${script?.msg||''}</textarea></div>
+    <div class="form-group"><label class="form-label">Dica estratégica (opcional)</label><input class="form-input" id="sm-tip" value="${script?.tip||''}" placeholder="Dica para o vendedor"></div>
+    <div class="form-footer">
+      <button class="btn btn-outline" onclick="closeModal('scriptModal')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveScript(${id?`'${id}'`:'null'})">${id?'Salvar alterações':'Criar script'}</button>
+    </div>`;
+  document.getElementById('scriptModal').classList.add('show');
+}
+
+async function saveScript(id) {
+  const body = {
+    id:    document.getElementById('sm-id').value,
+    etapa: document.getElementById('sm-etapa').value,
+    nicho: document.getElementById('sm-nicho').value,
+    sit:   document.getElementById('sm-sit').value,
+    msg:   document.getElementById('sm-msg').value,
+    tip:   document.getElementById('sm-tip').value || null,
+  };
+  if (!body.sit || !body.msg) return showToast('Situação e mensagem são obrigatórios');
+  if (id) {
+    await apiFetch('/admin/scripts/' + id, 'PATCH', body);
+    showToast('✅ Script atualizado!');
+  } else {
+    await apiFetch('/admin/scripts', 'POST', body);
+    showToast('✅ Script criado e disponível para todos os usuários!');
+  }
+  closeModal('scriptModal');
+  renderTab(CURRENT_TAB);
+}
+
+async function toggleScript(id, active) {
+  await apiFetch('/admin/scripts/' + id, 'PATCH', { active: !active });
+  showToast(active ? '🔒 Script ocultado' : '✅ Script ativado');
+  renderTab(CURRENT_TAB);
+}
+
+async function toggleFeatured(id, featured) {
+  await apiFetch('/admin/scripts/' + id, 'PATCH', { featured: !featured });
+  showToast(!featured ? '⭐ Script em destaque!' : 'Script removido do destaque');
+  renderTab(CURRENT_TAB);
+}
+
+// ═══════════════════════════════════════
+// METRICS
+// ═══════════════════════════════════════
+async function renderMetrics(main) {
+  const data = await apiFetch('/admin/metrics?days=30');
+  const { topScripts, planDistribution } = data;
+
+  main.innerHTML = `
+    <div class="fade-in">
+      <div class="page-title">Métricas globais</div>
+      <div class="page-sub">Dados dos últimos 30 dias</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Scripts mais copiados</div>
+          ${(topScripts||[]).map((s,i)=>`
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span style="font-size:12px;font-weight:800;color:var(--text3);min-width:20px">${i+1}</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.sit}</div>
+                <div style="font-size:10px;color:var(--text3)">${s.etapa} · 👍 ${s.thumbs_up||0} 👎 ${s.thumbs_down||0}</div>
+              </div>
+              <span class="badge badge-green">${s.total_copies} cópias</span>
+            </div>`).join('')||'<div style="color:var(--text3);font-size:13px">Sem dados</div>'}
+        </div>
+        <div class="card">
+          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Distribuição por plano</div>
+          ${Object.entries(planDistribution||{}).map(([plan,count])=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+              <span style="font-size:13px;font-weight:600">${plan}</span>
+              <span class="badge badge-blue">${count} usuários</span>
+            </div>`).join('')||'<div style="color:var(--text3);font-size:13px">Sem dados</div>'}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════
+// WEBHOOKS
+// ═══════════════════════════════════════
+async function renderWebhooks(main) {
+  main.innerHTML = `
+    <div class="fade-in">
+      <div class="page-title">Configuração do Webhook</div>
+      <div class="page-sub">Configure a Kiwify para enviar eventos automaticamente ao seu servidor</div>
+      <div class="card" style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;margin-bottom:16px">🔗 URLs do Webhook</div>
+        <div class="form-group">
+          <label class="form-label">URL — Compra aprovada</label>
+          <div style="display:flex;gap:8px">
+            <input class="form-input" value="${API}/webhook/kiwify?token=SEU_TOKEN" readonly style="font-family:monospace;font-size:12px">
+            <button class="btn btn-outline" onclick="navigator.clipboard.writeText('${API}/webhook/kiwify?token=SEU_TOKEN');showToast('✅ URL copiada!')">Copiar</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL — Cancelamento</label>
+          <div style="display:flex;gap:8px">
+            <input class="form-input" value="${API}/webhook/kiwify-cancel?token=SEU_TOKEN" readonly style="font-family:monospace;font-size:12px">
+            <button class="btn btn-outline" onclick="navigator.clipboard.writeText('${API}/webhook/kiwify-cancel?token=SEU_TOKEN');showToast('✅ URL copiada!')">Copiar</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px">📋 Passo a passo — Kiwify</div>
+        ${[
+          'Acesse sua conta na Kiwify',
+          'Vá em Produtos → selecione o produto',
+          'Clique em "Configurações" → "Webhooks"',
+          'Cole a URL de compra aprovada no campo correspondente',
+          'No campo "Token de segurança", coloque o valor de KIWIFY_WEBHOOK_TOKEN do seu .env',
+          'Clique em Salvar e faça uma compra teste',
+          'Repita para o produto de cancelamento',
+        ].map((s,i)=>`
+          <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+            <div style="width:22px;height:22px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000;flex-shrink:0">${i+1}</div>
+            <div style="font-size:13px;color:var(--text2)">${s}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+let debounceT;
+function debounce(fn, delay) { clearTimeout(debounceT); debounceT = setTimeout(fn, delay); }
+</script>
+</body>
+</html>
