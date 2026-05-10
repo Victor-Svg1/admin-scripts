@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Conteúdo Exclusivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0D0D0D;
+  --surface: #161616;
+  --surface2: #1E1E1E;
+  --border: #2A2A2A;
+  --verde: #25D366;
+  --verde-d: #1BA84A;
+  --ouro: #F59E0B;
+  --red: #EF4444;
+  --text: #F5F5F5;
+  --text-m: #A1A1AA;
+  --text-d: #52525B;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+/* HEADER */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+.header-brand .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--verde);
+  box-shadow: 0 0 8px var(--verde);
+}
+.header-back {
+  font-size: 13px;
+  color: var(--text-m);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color .15s;
+}
+.header-back:hover { color: var(--text); }
+
+/* MAIN */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* PAGE TITLE */
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+.page-sub {
+  font-size: 13px;
+  color: var(--text-m);
+  margin-top: 4px;
+}
+
+/* STATS */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.stat-label { font-size: 11px; color: var(--text-m); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+.stat-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -.03em; }
+
+/* CONTROLS */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-m);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .15s;
+}
+.filter-btn.active, .filter-btn:hover {
+  border-color: var(--verde);
+  color: var(--verde);
+  background: rgba(37,211,102,.08);
+}
+.spacer { flex: 1; }
+
+/* BTN */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: .15s;
+  text-decoration: none;
+}
+.btn-primary { background: var(--verde); color: #000; }
+.btn-primary:hover { background: var(--verde-d); }
+.btn-ghost { background: transparent; color: var(--text-m); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--text); border-color: #444; }
+.btn-danger { background: rgba(239,68,68,.1); color: var(--red); border: 1px solid rgba(239,68,68,.2); }
+.btn-danger:hover { background: rgba(239,68,68,.2); }
+.btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* GRID */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+/* CARD */
+.content-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color .15s;
+}
+.content-card:hover { border-color: #3A3A3A; }
+.card-thumb {
+  width: 100%;
+  height: 160px;
+  background: var(--surface2);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.card-thumb-placeholder { font-size: 40px; color: var(--text-d); }
+.card-type-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.type-article { background: rgba(37,211,102,.2); color: var(--verde); }
+.type-template { background: rgba(99,102,241,.2); color: #818CF8; }
+.type-guide { background: rgba(245,158,11,.2); color: var(--ouro); }
+.type-video { background: rgba(239,68,68,.2); color: var(--red); }
+.pub-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.pub-badge.published { background: var(--verde); box-shadow: 0 0 6px var(--verde); }
+.pub-badge.draft { background: var(--text-d); }
+.card-body { padding: 16px; }
+.card-category { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--text-d); margin-bottom: 6px; }
+.card-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 6px; line-height: 1.3; }
+.card-desc { font-size: 12px; color: var(--text-m); line-height: 1.5; margin-bottom: 14px; }
+.card-meta { font-size: 11px; color: var(--text-d); margin-bottom: 14px; }
+.card-actions { display: flex; gap: 8px; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 680px;
+  padding: 28px;
+  transform: translateY(20px);
+  transition: transform .2s;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.modal-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; }
+.modal-close { background: none; border: none; color: var(--text-m); cursor: pointer; padding: 4px; }
+.modal-close svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* FORM */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-group { margin-bottom: 14px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--text-m); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: block; }
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color .15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--verde); }
+.form-textarea { resize: vertical; min-height: 120px; }
+.form-select option { background: var(--surface); }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); }
+.toggle-label { font-size: 13px; font-weight: 600; }
+.toggle-sub { font-size: 11px; color: var(--text-m); margin-top: 2px; }
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: .2s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: .2s;
+}
+.toggle input:checked + .toggle-slider { background: var(--verde); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+.modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+/* EMPTY */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-d);
+}
+.empty-ico { font-size: 48px; margin-bottom: 16px; }
+.empty-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-m); margin-bottom: 8px; }
+.empty-sub { font-size: 14px; margin-bottom: 24px; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 999;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all .25s;
+  max-width: 320px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { border-color: var(--verde); color: var(--verde); }
+.toast.error { border-color: var(--red); color: var(--red); }
+
+@media(max-width: 640px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
+  .content-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">
+    <div class="dot"></div>
+    Central de Scripts — Admin
+  </div>
+  <a href="/" class="header-back">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Voltar ao painel
+  </a>
+</div>
+
+<div class="main">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Conteúdo Exclusivo</div>
+      <div class="page-sub">Gerencie o material disponível na área de membros do site PRO</div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal()">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Novo conteúdo
+    </button>
+  </div>
+
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-val" id="statTotal">—</div></div>
+    <div class="stat-card"><div class="stat-label">Publicados</div><div class="stat-val" style="color:var(--verde)" id="statPub">—</div></div>
+    <div class="stat-card"><div class="stat-label">Rascunhos</div><div class="stat-val" style="color:var(--ouro)" id="statDraft">—</div></div>
+    <div class="stat-card"><div class="stat-label">Categorias</div><div class="stat-val" id="statCats">—</div></div>
+  </div>
+
+  <div class="controls">
+    <button class="filter-btn active" onclick="filterItems(this,'all')">Todos</button>
+    <button class="filter-btn" onclick="filterItems(this,'article')">Artigos</button>
+    <button class="filter-btn" onclick="filterItems(this,'template')">Templates</button>
+    <button class="filter-btn" onclick="filterItems(this,'guide')">Guias</button>
+    <button class="filter-btn" onclick="filterItems(this,'video')">Vídeos</button>
+    <div class="spacer"></div>
+    <button class="filter-btn" id="filterPub" onclick="togglePubFilter()">Só publicados</button>
+  </div>
+
+  <div class="content-grid" id="contentGrid">
+    <div class="empty-state">
+      <div class="empty-ico">📂</div>
+      <div class="empty-title">Carregando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Novo conteúdo</div>
+      <button class="modal-close" onclick="closeModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tipo</label>
+        <select class="form-select" id="fType">
+          <option value="article">📄 Artigo</option>
+          <option value="template">📋 Template</option>
+          <option value="guide">📖 Guia</option>
+          <option value="video">🎥 Vídeo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <input class="form-input" id="fCategory" placeholder="ex: vendas, objeções, nicho">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Título *</label>
+      <input class="form-input" id="fTitle" placeholder="Título do conteúdo">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Descrição curta</label>
+      <input class="form-input" id="fDescription" placeholder="Uma linha sobre o que é esse conteúdo">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Conteúdo (HTML ou texto)</label>
+      <textarea class="form-textarea" id="fContent" placeholder="Cole aqui o conteúdo completo em HTML ou texto..."></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">URL da thumbnail</label>
+        <input class="form-input" id="fThumbnail" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL do vídeo (opcional)</label>
+        <input class="form-input" id="fVideoUrl" placeholder="https://youtube.com/...">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Ordem de exibição</label>
+        <input class="form-input" id="fOrder" type="number" placeholder="0" value="0">
+      </div>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Publicar agora</div>
+        <div class="toggle-sub">Conteúdo visível para todos os assinantes PRO</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="fPublished">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveContent()">
+        <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Salvar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = (window.location.hostname === 'localhost')
+  ? 'http://localhost:3000'
+  : 'https://central-scripts-backend-production.up.railway.app';
+
+const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+
+let allItems = [];
+let editingId = null;
+let filterType = 'all';
+let filterPubOnly = false;
+
+// ── Load ─────────────────────────────────────────────────────────
+async function loadContent() {
+  try {
+    const r = await fetch(`${API}/members-content/admin/list`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error);
+    allItems = d.items || [];
+    updateStats();
+    renderGrid();
+  } catch(e) {
+    showEmpty('Erro ao carregar. ' + e.message);
+  }
+}
+
+function updateStats() {
+  const pub = allItems.filter(i => i.published).length;
+  const cats = [...new Set(allItems.map(i => i.category).filter(Boolean))].length;
+  document.getElementById('statTotal').textContent = allItems.length;
+  document.getElementById('statPub').textContent = pub;
+  document.getElementById('statDraft').textContent = allItems.length - pub;
+  document.getElementById('statCats').textContent = cats;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('contentGrid');
+  let items = allItems;
+  if (filterType !== 'all') items = items.filter(i => i.type === filterType);
+  if (filterPubOnly) items = items.filter(i => i.published);
+
+  if (!items.length) { showEmpty('Nenhum conteúdo encontrado.'); return; }
+
+  const typeIcons = { article: '📄', template: '📋', guide: '📖', video: '🎥' };
+  const typeLabels = { article: 'Artigo', template: 'Template', guide: 'Guia', video: 'Vídeo' };
+
+  grid.innerHTML = items.map(item => `
+    <div class="content-card">
+      <div class="card-thumb">
+        ${item.thumbnail ? `<img src="${item.thumbnail}" alt="${item.title}" onerror="this.style.display='none'">` : ''}
+        <div class="card-thumb-placeholder">${typeIcons[item.type] || '📄'}</div>
+        <div class="card-type-badge type-${item.type}">${typeLabels[item.type] || item.type}</div>
+        <div class="pub-badge ${item.published ? 'published' : 'draft'}" title="${item.published ? 'Publicado' : 'Rascunho'}"></div>
+      </div>
+      <div class="card-body">
+        <div class="card-category">${item.category || 'geral'} · ordem ${item.order_index}</div>
+        <div class="card-title">${item.title}</div>
+        <div class="card-desc">${item.description || 'Sem descrição'}</div>
+        <div class="card-meta">Criado em ${new Date(item.created_at).toLocaleDateString('pt-BR')}</div>
+        <div class="card-actions">
+          <button class="btn btn-ghost" style="flex:1" onclick="editItem('${item.id}')">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Editar
+          </button>
+          <button class="btn" style="${item.published ? 'background:rgba(245,158,11,.1);color:var(--ouro);border:1px solid rgba(245,158,11,.2)' : 'background:rgba(37,211,102,.1);color:var(--verde);border:1px solid rgba(37,211,102,.2)'}" onclick="togglePublish('${item.id}', ${item.published})">
+            ${item.published ? 'Despublicar' : 'Publicar'}
+          </button>
+          <button class="btn btn-danger" style="padding:9px 12px" onclick="deleteItem('${item.id}')">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showEmpty(msg) {
+  document.getElementById('contentGrid').innerHTML = `
+    <div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-ico">📭</div>
+      <div class="empty-title">${msg}</div>
+      <div class="empty-sub">Clique em "Novo conteúdo" para adicionar o primeiro item.</div>
+      <button class="btn btn-primary" onclick="openModal()">+ Novo conteúdo</button>
+    </div>`;
+}
+
+// ── Filters ───────────────────────────────────────────────────────
+function filterItems(btn, type) {
+  document.querySelectorAll('.controls .filter-btn').forEach(b => {
+    if (!b.id) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  filterType = type;
+  renderGrid();
+}
+
+function togglePubFilter() {
+  filterPubOnly = !filterPubOnly;
+  const btn = document.getElementById('filterPub');
+  btn.classList.toggle('active', filterPubOnly);
+  renderGrid();
+}
+
+// ── Modal ─────────────────────────────────────────────────────────
+function openModal(item = null) {
+  editingId = item?.id || null;
+  document.getElementById('modalTitle').textContent = item ? 'Editar conteúdo' : 'Novo conteúdo';
+  document.getElementById('fType').value      = item?.type || 'article';
+  document.getElementById('fCategory').value  = item?.category || '';
+  document.getElementById('fTitle').value     = item?.title || '';
+  document.getElementById('fDescription').value = item?.description || '';
+  document.getElementById('fContent').value   = item?.content || '';
+  document.getElementById('fThumbnail').value = item?.thumbnail || '';
+  document.getElementById('fVideoUrl').value  = item?.video_url || '';
+  document.getElementById('fOrder').value     = item?.order_index || 0;
+  document.getElementById('fPublished').checked = item?.published || false;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function editItem(id) {
+  const item = allItems.find(i => i.id === id);
+  if (item) openModal(item);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  editingId = null;
+}
+
+// ── Save ──────────────────────────────────────────────────────────
+async function saveContent() {
+  const title = document.getElementById('fTitle').value.trim();
+  if (!title) { toast('Título obrigatório', 'error'); return; }
+
+  const body = {
+    type:        document.getElementById('fType').value,
+    category:    document.getElementById('fCategory').value.trim() || 'geral',
+    title,
+    description: document.getElementById('fDescription').value.trim(),
+    content:     document.getElementById('fContent').value.trim(),
+    thumbnail:   document.getElementById('fThumbnail').value.trim(),
+    video_url:   document.getElementById('fVideoUrl').value.trim(),
+    order_index: parseInt(document.getElementById('fOrder').value) || 0,
+    published:   document.getElementById('fPublished').checked,
+  };
+
+  try {
+    const url = editingId
+      ? `${API}/members-content/admin/update/${editingId}`
+      : `${API}/members-content/admin/create`;
+    const method = editingId ? 'PUT' : 'POST';
+
+    const r = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error);
+
+    toast(editingId ? 'Conteúdo atualizado!' : 'Conteúdo criado!', 'success');
+    closeModal();
+    loadContent();
+  } catch(e) {
+    toast('Erro: ' + e.message, 'error');
+  }
+}
+
+// ── Toggle publish ────────────────────────────────────────────────
+async function togglePublish(id, current) {
+  try {
+    const r = await fetch(`${API}/members-content/admin/update/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ published: !current }),
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error);
+    toast(!current ? 'Publicado!' : 'Despublicado', 'success');
+    loadContent();
+  } catch(e) {
+    toast('Erro: ' + e.message, 'error');
+  }
+}
+
+// ── Delete ────────────────────────────────────────────────────────
+async function deleteItem(id) {
+  if (!confirm('Deletar este conteúdo? Essa ação não pode ser desfeita.')) return;
+  try {
+    const r = await fetch(`${API}/members-content/admin/delete/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error);
+    toast('Deletado', 'success');
+    loadContent();
+  } catch(e) {
+    toast('Erro: ' + e.message, 'error');
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────────────────
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── Click outside modal ───────────────────────────────────────────
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ── Init ──────────────────────────────────────────────────────────
+loadContent();
+</script>
+</body>
+</html>
