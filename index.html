@@ -2,705 +2,950 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Central de Scripts PRO</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Central de Scripts — Admin</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#F0F2F5;--surface:#fff;--surface2:#F4F6F9;--border:#E2E5EC;
-  --text:#111827;--text2:#4B5563;--text3:#9CA3AF;
-  --wa:#25D366;--wa-l:rgba(37,211,102,.1);--wa-dark:#128C4A;
-  --red:#EF4444;--red-l:#FEF2F2;--amber:#F59E0B;--amber-l:#FFFBEB;
-  --blue:#3B82F6;--blue-l:#EFF6FF;
-  --shadow:0 1px 4px rgba(0,0,0,.07),0 4px 12px rgba(0,0,0,.05);
-  --r:10px;--font:'Plus Jakarta Sans',sans-serif;
-}
-html,body{height:100%;overflow:hidden}
-body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px}
-button{cursor:pointer;font-family:var(--font);transition:all .15s}
-input,select,textarea{font-family:var(--font)}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#D1D5DB;border-radius:3px}
+:root{--bg:#0A0A0A;--s1:#111;--s2:#1A1A1A;--s3:#222;--b:#2A2A2A;--b2:#333;--t:#F0F0F0;--t2:#999;--t3:#555;--g:#22C55E;--gd:#16A34A;--o:#F59E0B;--r:#EF4444;--bl:#3B82F6;--pu:#A855F7;--r8:8px;--r12:12px;--tr:all .15s}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;min-height:100vh}
+a{color:inherit;text-decoration:none}
 
 /* LOGIN */
-#login{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:var(--bg)}
-.lc{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:36px;width:100%;max-width:380px;box-shadow:var(--shadow)}
-.lc-top{display:flex;align-items:center;gap:10px;margin-bottom:24px}
-.lc-ico{width:38px;height:38px;background:#0A2E1E;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.lc-title{font-size:18px;font-weight:800}
-.lc-badge{font-size:9px;font-weight:800;background:var(--red);color:#fff;padding:2px 7px;border-radius:12px}
-.fg{margin-bottom:14px}
-.fl{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-bottom:5px}
-.fi{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--text);background:var(--surface2);outline:none}
-.fi:focus{border-color:#3B82F6}
-.btn-login{width:100%;background:#0A2E1E;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;margin-top:4px}
-.btn-login:hover{background:#1A5C35}
-
-/* APP */
-#app{height:100vh;display:none;flex-direction:column}
-#app.show{display:flex}
-
-/* TOPBAR */
-.tb{height:52px;min-height:52px;background:#0A2E1E;display:flex;align-items:center;padding:0 20px;gap:16px}
-.tb-logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#fff}
-.tb-logo-ico{width:28px;height:28px;background:var(--wa);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
-.tb-badge{font-size:9px;font-weight:800;background:var(--red);color:#fff;padding:2px 7px;border-radius:12px}
-.tb-spacer{flex:1}
-.tb-user{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.7)}
-.tb-avatar{width:28px;height:28px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#000}
-.btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);border-radius:7px;padding:5px 12px;font-size:12px}
-.btn-logout:hover{background:rgba(255,255,255,.2)}
+#login{display:none;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
+.login-box{background:var(--s1);border:1px solid var(--b);border-radius:16px;padding:40px;width:100%;max-width:380px}
+.login-logo{font-size:20px;font-weight:800;margin-bottom:28px;display:flex;align-items:center;gap:8px}
+.login-logo span{width:8px;height:8px;border-radius:50%;background:var(--g);box-shadow:0 0 8px var(--g);display:inline-block}
+.lg{display:block;font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.fi{width:100%;background:var(--bg);border:1px solid var(--b);border-radius:var(--r8);padding:10px 14px;color:var(--t);font-size:14px;outline:none;transition:var(--tr);margin-bottom:12px}
+.fi:focus{border-color:var(--g)}
+.err{font-size:13px;color:var(--r);margin-bottom:12px;display:none}
 
 /* LAYOUT */
-.layout{flex:1;display:flex;overflow:hidden;min-height:0}
+#app{display:none;min-height:100vh}
+#app.show{display:flex;flex-direction:column}
+.topbar{background:var(--s1);border-bottom:1px solid var(--b);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.brand{font-weight:800;font-size:15px;display:flex;align-items:center;gap:7px}
+.brand-dot{width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 6px var(--g)}
+.nav{display:flex;gap:2px;flex:1;margin-left:8px}
+.nav-item{padding:6px 14px;border-radius:6px;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;transition:var(--tr);border:none;background:transparent;display:flex;align-items:center;gap:6px}
+.nav-item:hover{color:var(--t);background:var(--s2)}
+.nav-item.active{color:var(--t);background:var(--s3);font-weight:600}
+.nav-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.logout-btn{padding:6px 14px;border:1px solid var(--b);border-radius:6px;background:transparent;color:var(--t2);font-size:13px;cursor:pointer;transition:var(--tr)}
+.logout-btn:hover{color:var(--r);border-color:var(--r)}
+.main{flex:1;padding:24px;max-width:1400px;margin:0 auto;width:100%}
 
-/* SIDEBAR */
-.sb{width:210px;min-width:210px;background:#0D1F15;overflow-y:auto;padding:12px 0}
-.sb-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.55);cursor:pointer;border-left:2px solid transparent;transition:all .15s}
-.sb-item:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.05)}
-.sb-item.active{color:#fff;border-left-color:var(--wa);background:rgba(37,211,102,.08);font-weight:600}
-.sb-item .icon{font-size:15px;width:18px;text-align:center;flex-shrink:0}
-.sb-section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:12px 16px 4px}
-
-/* MAIN */
-.main{flex:1;overflow-y:auto;padding:24px}
-.page-title{font-size:18px;font-weight:800;margin-bottom:4px}
-.page-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+/* BTN */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r8);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:var(--tr)}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-g{background:var(--g);color:#000}.btn-g:hover{background:var(--gd)}
+.btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--b)}.btn-ghost:hover{color:var(--t);border-color:var(--b2)}
+.btn-danger{background:rgba(239,68,68,.1);color:var(--r);border:1px solid rgba(239,68,68,.2)}.btn-danger:hover{background:rgba(239,68,68,.2)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-blue{background:rgba(59,130,246,.15);color:var(--bl);border:1px solid rgba(59,130,246,.2)}.btn-blue:hover{background:rgba(59,130,246,.25)}
 
 /* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
-.stat-val{font-size:28px;font-weight:800;margin-bottom:4px}
-.stat-lbl{font-size:12px;color:var(--text2)}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat{background:var(--s1);border:1px solid var(--b);border-radius:var(--r12);padding:18px 20px}
+.stat-label{font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.stat-val{font-size:28px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.stat-sub{font-size:12px;color:var(--t3);margin-top:4px}
+.stat-trend{font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;margin-top:6px}
+.trend-up{background:rgba(34,197,94,.12);color:var(--g)}
+.trend-dn{background:rgba(239,68,68,.12);color:var(--r)}
+
+/* SECTIONS */
+.section{background:var(--s1);border:1px solid var(--b);border-radius:var(--r12);margin-bottom:16px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--b);flex-wrap:wrap;gap:10px}
+.sec-title{font-size:14px;font-weight:700}
+.sec-body{padding:20px}
+.sec-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* CHARTS */
+.chart-wrap{position:relative;height:220px}
+canvas{border-radius:8px}
 
 /* TABLE */
-.tbl-wrap{overflow-x:auto}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3)}
+.search-ico svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.search-inp{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:var(--r8);padding:8px 12px 8px 32px;color:var(--t);font-size:13px;outline:none;transition:var(--tr)}
+.search-inp:focus{border-color:var(--g)}
+.filter-btn{padding:7px 14px;border-radius:20px;border:1px solid var(--b);background:transparent;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:var(--tr)}
+.filter-btn.on,.filter-btn:hover{border-color:var(--g);color:var(--g);background:rgba(34,197,94,.08)}
+.period-btn{padding:6px 12px;border-radius:20px;border:1px solid var(--b);background:transparent;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:var(--tr)}
+.period-btn.on{border-color:var(--g);color:var(--g);background:rgba(34,197,94,.1)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:10px 12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border)}
-td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:middle}
-tr:hover td{background:var(--surface2)}
-td strong{color:var(--text)}
+th{text-align:left;font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;border-bottom:1px solid var(--b)}
+td{padding:10px 12px;border-bottom:1px solid var(--b);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.badge-g{background:rgba(34,197,94,.15);color:var(--g)}
+.badge-r{background:rgba(239,68,68,.12);color:var(--r)}
+.badge-o{background:rgba(245,158,11,.12);color:var(--o)}
+.badge-b{background:rgba(59,130,246,.12);color:var(--bl)}
+.badge-p{background:rgba(168,85,247,.12);color:var(--pu)}
+.td-actions{display:flex;gap:6px;flex-wrap:wrap}
 
-/* BADGES */
-.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
-.badge-green{background:var(--wa-l);color:var(--wa-dark)}
-.badge-red{background:var(--red-l);color:var(--red)}
-.badge-amber{background:var(--amber-l);color:#92400E}
-.badge-blue{background:var(--blue-l);color:#1E40AF}
+/* BULK BAR */
+.bulk-bar{background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px 16px;display:none;align-items:center;gap:12px;margin-bottom:12px}
+.bulk-bar.show{display:flex}
+.bulk-sep{width:1px;height:18px;background:var(--b)}
 
-/* BUTTONS */
-.btn{border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;transition:all .15s}
-.btn-primary{background:var(--wa);color:#000}
-.btn-primary:hover{background:#2DE070}
-.btn-danger{background:var(--red-l);color:var(--red);border:1px solid rgba(239,68,68,.2)}
-.btn-danger:hover{background:var(--red);color:#fff}
-.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text2)}
-.btn-outline:hover{border-color:var(--border);background:var(--surface2);color:var(--text)}
-.btn-sm{padding:5px 10px;font-size:11px}
-.btn-dark{background:#0A2E1E;color:#fff}
-.btn-dark:hover{background:#1A5C35}
-
-/* FORM */
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.form-group{margin-bottom:14px}
-.form-label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-bottom:5px}
-.form-input{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;color:var(--text);background:var(--surface2);outline:none}
-.form-input:focus{border-color:var(--blue);background:var(--surface)}
-.form-select{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;color:var(--text);background:var(--surface2);outline:none}
-.form-textarea{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;color:var(--text);background:var(--surface2);outline:none;min-height:100px;resize:vertical}
-.form-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--b)}
+.page-info{font-size:12px;color:var(--t2)}
+.page-btns{display:flex;gap:6px}
+.page-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--b);background:transparent;color:var(--t2);font-size:12px;cursor:pointer;transition:var(--tr)}
+.page-btn:hover,.page-btn.on{background:var(--s3);color:var(--t);border-color:var(--b2)}
+.page-btn:disabled{opacity:.3;cursor:default}
 
 /* MODAL */
-.modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.4);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:20px}
-.modal.show{display:flex}
-.modal-inner{background:var(--surface);border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
-.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
-.modal-title{font-size:16px;font-weight:700}
-.modal-close{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface2);font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--text2)}
-.modal-close:hover{background:var(--red-l);color:var(--red);border-color:var(--red)}
-.modal-body{padding:24px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--s1);border:1px solid var(--b);border-radius:16px;width:100%;max-width:560px;padding:24px;transform:translateY(16px);transition:transform .2s}
+.overlay.open .modal{transform:translateY(0)}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:17px;font-weight:800}
+.modal-x{background:none;border:none;color:var(--t2);cursor:pointer;padding:4px}
+.modal-x svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.fs{width:100%;background:var(--bg);border:1px solid var(--b);border-radius:var(--r8);padding:9px 12px;color:var(--t);font-size:14px;font-family:inherit;outline:none;transition:var(--tr)}
+.fs:focus{border-color:var(--g)}
+select.fs option{background:var(--s1)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-ftr{display:flex;gap:10px;justify-content:flex-end;padding-top:18px;margin-top:4px;border-top:1px solid var(--b)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border-radius:var(--r8);border:1px solid var(--b)}
+.tl{font-size:13px;font-weight:600}
+.toggle-sw{position:relative;width:42px;height:22px;flex-shrink:0}
+.toggle-sw input{opacity:0;width:0;height:0}
+.tslider{position:absolute;inset:0;background:var(--b);border-radius:11px;cursor:pointer;transition:.2s}
+.tslider::before{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.2s}
+.toggle-sw input:checked+.tslider{background:var(--g)}
+.toggle-sw input:checked+.tslider::before{transform:translateX(20px)}
 
-/* SEARCH */
-.search-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.search-input{flex:1;min-width:200px;border:1.5px solid var(--border);border-radius:7px;padding:9px 12px 9px 36px;font-size:13px;color:var(--text);background:var(--surface);outline:none;position:relative}
-.search-wrap{position:relative;flex:1;min-width:200px}
-.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none}
-.search-wrap input{width:100%;padding-left:33px}
+/* CRON */
+.cron-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.cron-card{background:var(--s2);border:1px solid var(--b);border-radius:var(--r8);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cron-info{flex:1}
+.cron-name{font-size:13px;font-weight:700;margin-bottom:3px}
+.cron-desc{font-size:11px;color:var(--t2)}
+.cron-status{width:8px;height:8px;border-radius:50%;background:var(--g);flex-shrink:0}
+.cron-status.running{animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;border-radius:10px;padding:11px 18px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(80px);transition:transform .22s cubic-bezier(.4,0,.2,1)}
-.toast.show{transform:translateY(0)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--s1);border:1px solid var(--b);border-radius:10px;padding:12px 18px;font-size:13px;font-weight:500;z-index:999;transform:translateY(20px);opacity:0;transition:all .25s;max-width:300px;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:var(--g);color:var(--g)}
+.toast.err{border-color:var(--r);color:var(--r)}
+.toast.warn{border-color:var(--o);color:var(--o)}
 
-/* TOGGLE */
-.toggle{position:relative;width:38px;height:21px;background:#D1D5DB;border-radius:11px;cursor:pointer;transition:all .15s}
-.toggle.on{background:var(--wa)}
-.toggle::after{content:'';position:absolute;width:15px;height:15px;border-radius:50%;background:#fff;top:3px;left:3px;transition:all .15s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.toggle.on::after{left:20px}
+/* EXPIRY ALERT */
+.expiry-chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(239,68,68,.12);color:var(--r)}
+.expiry-soon{background:rgba(245,158,11,.12);color:var(--o)}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.fade-in{animation:fadeUp .2s ease both}
+/* CONTENT TAB */
+.content-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.content-card{background:var(--s2);border:1px solid var(--b);border-radius:var(--r12);overflow:hidden;transition:var(--tr)}
+.content-card:hover{border-color:var(--b2)}
+.cc-thumb{width:100%;height:130px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:32px;position:relative;overflow:hidden}
+.cc-thumb img{width:100%;height:100%;object-fit:cover}
+.cc-body{padding:14px}
+.cc-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:4px}
+.cc-title{font-size:14px;font-weight:700;margin-bottom:4px;line-height:1.3}
+.cc-desc{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cc-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+@media(max-width:768px){.stat-grid{grid-template-columns:repeat(2,1fr)}.sec-row{grid-template-columns:1fr}.nav{overflow-x:auto}.nav-item span{display:none}}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="login">
-  <div class="lc">
-    <div class="lc-top">
-      <div class="lc-ico">🛡️</div>
-      <div>
-        <span class="lc-title">Painel Admin</span>
-        <span class="lc-badge">ADMIN</span>
-      </div>
-    </div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px">Central de Scripts PRO — Acesso restrito</div>
-    <div class="fg"><label class="fl">E-mail</label><input class="fi" type="email" id="a-email" placeholder="admin@email.com"></div>
-    <div class="fg"><label class="fl">Senha</label><input class="fi" type="password" id="a-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()"></div>
-    <button class="btn-login" onclick="doAdminLogin()">Entrar como administrador</button>
+  <div class="login-box">
+    <div class="login-logo"><span></span>Central de Scripts</div>
+    <div class="err" id="loginErr"></div>
+    <label class="lg">Email</label>
+    <input class="fi" id="lEmail" type="email" placeholder="admin@centralscripts.com.br">
+    <label class="lg">Senha</label>
+    <input class="fi" id="lPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn btn-g" style="width:100%;justify-content:center;padding:11px" onclick="doLogin()" id="loginBtn">Entrar →</button>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
-  <div class="tb">
-    <div class="tb-logo">
-      <div class="tb-logo-ico">💬</div>
-      Central de Scripts
-      <span class="tb-badge">ADMIN</span>
+  <div class="topbar">
+    <div class="brand"><div class="brand-dot"></div>Admin</div>
+    <nav class="nav">
+      <button class="nav-item active" data-tab="dashboard" onclick="goTab('dashboard',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-tab="users" onclick="goTab('users',this)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        <span>Usuários</span>
+      </button>
+      <button class="nav-item" data-tab="scripts" onclick="goTab('scripts',this)">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Scripts</span>
+      </button>
+      <button class="nav-item" data-tab="metrics" onclick="goTab('metrics',this)">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Métricas</span>
+      </button>
+      <button class="nav-item" data-tab="conteudo" onclick="goTab('conteudo',this)">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Conteúdo</span>
+      </button>
+      <button class="nav-item" data-tab="crons" onclick="goTab('crons',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Crons</span>
+      </button>
+      <button class="nav-item" data-tab="webhooks" onclick="goTab('webhooks',this)">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>Webhooks</span>
+      </button>
+    </nav>
+    <div class="topbar-right">
+      <span style="font-size:12px;color:var(--t2)" id="adminEmail"></span>
+      <button class="logout-btn" onclick="logout()">Sair</button>
     </div>
-    <div class="tb-spacer"></div>
-    <div class="tb-user">
-      <div class="tb-avatar" id="adm-avatar">A</div>
-      <span id="adm-name">Admin</span>
-    </div>
-    <button class="btn-logout" onclick="logout()">Sair</button>
   </div>
-
-  <div class="layout">
-    <!-- SIDEBAR -->
-    <div class="sb">
-      <div class="sb-section-label">Principal</div>
-      <div class="sb-item active" data-tab="dashboard" onclick="goTab('dashboard',this)"><span class="icon">📊</span> Dashboard</div>
-      <div class="sb-item" data-tab="users" onclick="goTab('users',this)"><span class="icon">👥</span> Usuários</div>
-      <div class="sb-item" data-tab="scripts" onclick="goTab('scripts',this)"><span class="icon">📋</span> Scripts</div>
-      <div class="sb-section-label">Análise</div>
-      <div class="sb-item" data-tab="metrics" onclick="goTab('metrics',this)"><span class="icon">📈</span> Métricas</div>
-      <div class="sb-item" data-tab="webhooks" onclick="goTab('webhooks',this)"><span class="icon">🔗</span> Webhooks</div>
-    </div>
-
-    <!-- MAIN -->
-    <div class="main" id="mainContent"></div>
-  </div>
+  <div class="main" id="mainContent"></div>
 </div>
 
-<!-- MODAL: usuário -->
-<div class="modal" id="userModal" onclick="if(event.target===this)closeModal('userModal')">
-  <div class="modal-inner">
-    <div class="modal-head">
-      <div class="modal-title" id="userModalTitle">Editar usuário</div>
-      <button class="modal-close" onclick="closeModal('userModal')">✕</button>
-    </div>
-    <div class="modal-body" id="userModalBody"></div>
-  </div>
-</div>
-
-<!-- MODAL: script -->
-<div class="modal" id="scriptModal" onclick="if(event.target===this)closeModal('scriptModal')">
-  <div class="modal-inner">
-    <div class="modal-head">
-      <div class="modal-title" id="scriptModalTitle">Novo script</div>
-      <button class="modal-close" onclick="closeModal('scriptModal')">✕</button>
-    </div>
-    <div class="modal-body" id="scriptModalBody"></div>
-  </div>
-</div>
-
+<div class="overlay" id="overlay"><div class="modal" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════════
-const API = 'https://central-scripts-backend-production.up.railway.app'; // ← Troque pela URL do seu backend
-let TOKEN = localStorage.getItem('adm_token') || '';
-let CURRENT_TAB = 'dashboard';
+const API = 'https://central-scripts-backend-production.up.railway.app';
+let TOKEN = localStorage.getItem('csa_token') || '';
+let ADMIN = null;
+let currentTab = 'dashboard';
+let metricsDays = 30;
+let userPage = 1, userSearch = '', userFilter = 'all';
+let bulkMode = false, selectedUsers = new Set();
+let scriptSearch = '', scriptPage = 1;
+let contentSearch = '', contentFilter = 'all';
+let chartInstances = {};
 
-// ═══════════════════════════════════════
-// AUTH
-// ═══════════════════════════════════════
-async function doAdminLogin() {
-  const email = document.getElementById('a-email').value.trim();
-  const pass  = document.getElementById('a-pass').value;
-  if (!email || !pass) return showToast('Preencha email e senha');
+// ── INIT ────────────────────────────────────────────────────────
+window.onload = () => {
+  if (TOKEN) showApp();
+  else showLogin();
+};
 
+function showLogin() { document.getElementById('login').style.display = 'flex'; }
+function showApp() {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').classList.add('show');
+  renderTab('dashboard');
+}
+
+// ── AUTH ────────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('lEmail').value.trim();
+  const pass = document.getElementById('lPass').value;
+  const err = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  if (!email || !pass) { err.textContent = 'Preencha todos os campos'; err.style.display = 'block'; return; }
+  btn.textContent = 'Entrando...'; btn.disabled = true;
   try {
-    const res  = await apiFetch('/auth/admin-login', 'POST', { email, password: pass }, false);
-    TOKEN      = res.token;
-    localStorage.setItem('adm_token', TOKEN);
-    document.getElementById('adm-name').textContent   = res.admin.name;
-    document.getElementById('adm-avatar').textContent = (res.admin.name||'A')[0].toUpperCase();
-    document.getElementById('login').style.display    = 'none';
-    document.getElementById('app').classList.add('show');
-    goTab('dashboard');
-  } catch (err) {
-    showToast('❌ ' + (err.message || 'Credenciais inválidas'));
-  }
+    const d = await apiFetch('/admin/login', 'POST', { email, password: pass });
+    if (!d || !d.token) throw new Error(d?.error || 'Credenciais inválidas');
+    TOKEN = d.token; ADMIN = d.admin;
+    localStorage.setItem('csa_token', TOKEN);
+    document.getElementById('adminEmail').textContent = email;
+    showApp();
+  } catch(e) { err.textContent = e.message; err.style.display = 'block'; }
+  finally { btn.textContent = 'Entrar →'; btn.disabled = false; }
 }
 
 function logout() {
-  TOKEN = ''; localStorage.removeItem('adm_token');
+  TOKEN = ''; localStorage.removeItem('csa_token');
   document.getElementById('app').classList.remove('show');
   document.getElementById('login').style.display = 'flex';
 }
 
-// Auto-login se tiver token
-if (TOKEN) {
-  document.getElementById('login').style.display = 'none';
-  document.getElementById('app').classList.add('show');
-  setTimeout(() => goTab('dashboard'), 0);
-}
-
-// ═══════════════════════════════════════
-// API HELPER
-// ═══════════════════════════════════════
-async function apiFetch(path, method = 'GET', body = null, auth = true) {
-  const headers = { 'Content-Type': 'application/json' };
-  if (auth) headers['Authorization'] = 'Bearer ' + TOKEN;
-
-  const res = await fetch(API + path, {
-    method, headers,
-    body: body ? JSON.stringify(body) : undefined,
+// ── API ──────────────────────────────────────────────────────────
+async function apiFetch(path, method = 'GET', body) {
+  const r = await fetch(API + path, {
+    method,
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+    body: body ? JSON.stringify(body) : undefined
   });
-
-  if (res.status === 401) { logout(); throw new Error('Sessão expirada'); }
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Erro na requisição');
-  return data;
+  if (r.status === 401) { logout(); return null; }
+  return r.json();
 }
 
-// ═══════════════════════════════════════
-// TABS
-// ═══════════════════════════════════════
+// ── TABS ─────────────────────────────────────────────────────────
 function goTab(tab, el) {
-  CURRENT_TAB = tab;
-  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
-  const active = el || document.querySelector(`.sb-item[data-tab="${tab}"]`);
-  if (active) active.classList.add('active');
+  currentTab = tab;
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  (el || document.querySelector('[data-tab="' + tab + '"]'))?.classList.add('active');
   renderTab(tab);
 }
 
-async function renderTab(tab) {
-  const main = document.getElementById('mainContent');
-  main.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text3)">Carregando...</div>';
-
-  try {
-    if (tab === 'dashboard') await renderDashboard(main);
-    else if (tab === 'users')   await renderUsers(main);
-    else if (tab === 'scripts') await renderScripts(main);
-    else if (tab === 'metrics') await renderMetrics(main);
-    else if (tab === 'webhooks')await renderWebhooks(main);
-  } catch (err) {
-    main.innerHTML = `<div style="padding:40px;color:var(--red)">${err.message}</div>`;
-  }
+function renderTab(tab) {
+  Object.values(chartInstances).forEach(c => c.destroy());
+  chartInstances = {};
+  const el = document.getElementById('mainContent');
+  el.innerHTML = '<div style="color:var(--t2);padding:40px;text-align:center">Carregando...</div>';
+  const fn = { dashboard: renderDashboard, users: renderUsers, scripts: renderScripts, metrics: renderMetrics, conteudo: renderConteudo, crons: renderCrons, webhooks: renderWebhooks }[tab];
+  if (fn) fn(el);
 }
 
-// ═══════════════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════════════
-async function renderDashboard(main) {
-  const data = await apiFetch('/admin/dashboard');
-  const { stats, byPlan, recentUsers, topScripts } = data;
+// ── DASHBOARD ────────────────────────────────────────────────────
+async function renderDashboard(el) {
+  const d = await apiFetch('/admin/dashboard');
+  if (!d) return;
+  const mrr = ((d.byPlan?.mensal || 0) * 29.9 + (d.byPlan?.anual || 0) * (299.9 / 12)).toFixed(2).replace('.', ',');
+  const expiringCount = d.expiringThisWeek || 0;
 
-  const planColors = { monthly:'var(--blue)', annual:'var(--wa)', lifetime:'var(--amber)', essencial:'var(--text3)' };
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-size:20px;font-weight:800">Dashboard</div>
+    <div style="font-size:12px;color:var(--t2)">Atualizado agora</div>
+  </div>
 
-  main.innerHTML = `
-    <div class="fade-in">
-      <div class="page-title">Dashboard</div>
-      <div class="page-sub">Visão geral da plataforma em tempo real</div>
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-label">Membros ativos</div>
+      <div class="stat-val" style="color:var(--g)">${d.activeUsers ?? '—'}</div>
+      <div class="stat-sub">de ${d.totalUsers ?? '—'} totais</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">MRR estimado</div>
+      <div class="stat-val" style="color:var(--o)">R$${mrr}</div>
+      <div class="stat-sub">receita mensal recorrente</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Scripts copiados</div>
+      <div class="stat-val">${d.totalCopies ?? '—'}</div>
+      <div class="stat-sub">total acumulado</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label" style="${expiringCount > 0 ? 'color:var(--r)' : ''}">Expirando esta semana</div>
+      <div class="stat-val" style="${expiringCount > 0 ? 'color:var(--r)' : ''}">${expiringCount}</div>
+      <div class="stat-sub"><button class="btn btn-sm btn-danger" style="margin-top:4px" onclick="goTab('users',null);setTimeout(()=>setUserFilter('expiring'),300)">Ver usuários →</button></div>
+    </div>
+  </div>
 
-      <div class="stats-grid">
-        <div class="stat"><div class="stat-val" style="color:var(--wa)">${stats.activeUsers}</div><div class="stat-lbl">Usuários ativos</div></div>
-        <div class="stat"><div class="stat-val" style="color:var(--blue)">${stats.totalUsers}</div><div class="stat-lbl">Total de usuários</div></div>
-        <div class="stat"><div class="stat-val" style="color:var(--amber)">${stats.totalCopies||0}</div><div class="stat-lbl">Scripts copiados</div></div>
-        <div class="stat"><div class="stat-val" style="color:var(--text2)">${stats.totalScripts}</div><div class="stat-lbl">Scripts ativos</div></div>
-      </div>
+  <div class="sec-row">
+    <div class="section">
+      <div class="sec-head"><div class="sec-title">Distribuição por plano</div></div>
+      <div class="sec-body"><div class="chart-wrap"><canvas id="planChart"></canvas></div></div>
+    </div>
+    <div class="section">
+      <div class="sec-head"><div class="sec-title">Novos membros (últimos 30 dias)</div></div>
+      <div class="sec-body"><div class="chart-wrap"><canvas id="growthChart"></canvas></div></div>
+    </div>
+  </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="card">
-          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Usuários por plano</div>
-          ${Object.entries(byPlan||{}).map(([plan,count])=>`
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-              <span style="font-size:13px;font-weight:600;color:${planColors[plan]||'var(--text)'}">${plan}</span>
-              <span class="badge badge-blue">${count} usuários</span>
-            </div>`).join('')||'<div style="color:var(--text3);font-size:13px">Sem dados</div>'}
-        </div>
-        <div class="card">
-          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Scripts mais copiados</div>
-          ${(topScripts||[]).map((s,i)=>`
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
-              <span style="font-size:12px;font-weight:800;color:var(--text3);min-width:18px">${i+1}</span>
-              <span style="flex:1;font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.sit}</span>
-              <span class="badge badge-green">${s.total_copies} cópias</span>
-            </div>`).join('')||'<div style="color:var(--text3);font-size:13px">Sem dados</div>'}
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:16px">
-        <div style="font-size:13px;font-weight:700;margin-bottom:14px">Usuários recentes</div>
-        <table><thead><tr><th>Email</th><th>Nome</th><th>Plano</th><th>Cadastro</th><th>Status</th><th></th></tr></thead>
-        <tbody>${(recentUsers||[]).map(u=>`
+  <div class="section">
+    <div class="sec-head"><div class="sec-title">Novos usuários recentes</div></div>
+    <div class="sec-body">
+      <table>
+        <thead><tr><th>Nome</th><th>Email</th><th>Plano</th><th>Cadastro</th><th>Status</th></tr></thead>
+        <tbody>${(d.recentUsers || []).map(u => `
           <tr>
-            <td>${u.email}</td>
-            <td><strong>${u.name||'—'}</strong></td>
-            <td><span class="badge badge-blue">${u.plan_type}</span></td>
-            <td>${new Date(u.created_at).toLocaleDateString('pt-BR')}</td>
-            <td><span class="badge ${u.active?'badge-green':'badge-red'}">${u.active?'Ativo':'Inativo'}</span></td>
-            <td><button class="btn btn-outline btn-sm" onclick="openUserModal('${u.id}')">Editar</button></td>
-          </tr>`).join('')}</tbody></table>
-      </div>
-    </div>`;
-}
-
-// ═══════════════════════════════════════
-// USERS
-// ═══════════════════════════════════════
-async function renderUsers(main, search = '', plan = '', active = '') {
-  const params = new URLSearchParams({ limit: 100 });
-  if (search) params.set('search', search);
-  if (plan)   params.set('plan', plan);
-  if (active) params.set('active', active);
-
-  const { users } = await apiFetch('/admin/users?' + params);
-
-  main.innerHTML = `
-    <div class="fade-in">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <div class="page-title">Usuários <span style="font-size:14px;font-weight:500;color:var(--text3)">(${users.length})</span></div>
-        <button class="btn btn-dark" onclick="openCreateUserModal()">+ Novo usuário</button>
-      </div>
-      <div class="page-sub">Gerencie acessos, planos e dados dos clientes</div>
-
-      <div class="search-bar">
-        <div class="search-wrap" style="flex:1;max-width:360px">
-          <span class="search-icon">🔍</span>
-          <input class="form-input" id="user-search" placeholder="Buscar por email ou nome..." oninput="debounce(()=>renderUsers(document.getElementById('mainContent'),this.value,document.getElementById('plan-filter').value),400)">
-        </div>
-        <select class="form-select" id="plan-filter" style="width:140px" onchange="renderUsers(document.getElementById('mainContent'),document.getElementById('user-search').value,this.value)">
-          <option value="">Todos os planos</option>
-          <option value="monthly">Mensal</option>
-          <option value="annual">Anual</option>
-          <option value="lifetime">Vitalício</option>
-          <option value="essencial">Essencial</option>
-        </select>
-      </div>
-
-      <div class="card tbl-wrap">
-        <table><thead><tr><th>Email</th><th>Nome</th><th>Plano</th><th>Favoritos</th><th>Cópias</th><th>Último acesso</th><th>Status</th><th>Ações</th></tr></thead>
-        <tbody>${users.map(u=>`
-          <tr>
-            <td>${u.email}</td>
-            <td><strong>${u.name||'—'}</strong><br><span style="font-size:11px;color:var(--text3)">${u.biz_name||''}</span></td>
-            <td><span class="badge badge-blue">${u.plan_type}</span>${u.temp_password?'<br><span class="badge badge-amber" style="margin-top:3px">Senha temp.</span>':''}</td>
-            <td>${u.total_favorites||0}</td>
-            <td>${u.total_copies||0}</td>
-            <td style="font-size:12px">${u.last_login?new Date(u.last_login).toLocaleDateString('pt-BR'):'—'}</td>
-            <td><span class="badge ${u.active?'badge-green':'badge-red'}">${u.active?'Ativo':'Inativo'}</span></td>
-            <td>
-              <div style="display:flex;gap:5px">
-                <button class="btn btn-outline btn-sm" onclick="openUserModal('${u.id}')">Editar</button>
-                <button class="btn btn-sm ${u.active?'btn-danger':'btn-primary'}" onclick="toggleUser('${u.id}',${u.active})">${u.active?'Desativar':'Ativar'}</button>
-              </div>
-            </td>
+            <td style="font-weight:600">${u.name || '—'}</td>
+            <td style="color:var(--t2)">${u.email}</td>
+            <td><span class="badge ${u.plan === 'anual' ? 'badge-p' : 'badge-b'}">${u.plan || 'mensal'}</span></td>
+            <td style="color:var(--t2)">${u.created_at ? new Date(u.created_at).toLocaleDateString('pt-BR') : '—'}</td>
+            <td><span class="badge ${u.active ? 'badge-g' : 'badge-r'}">${u.active ? 'Ativo' : 'Inativo'}</span></td>
           </tr>`).join('')}
-        </tbody></table>
-      </div>
-    </div>`;
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  // Plan chart (doughnut)
+  const byPlan = d.byPlan || {};
+  chartInstances.plan = new Chart(document.getElementById('planChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Mensal', 'Anual', 'Outros'],
+      datasets: [{ data: [byPlan.mensal || 0, byPlan.anual || 0, byPlan.outros || 0],
+        backgroundColor: ['rgba(59,130,246,.8)', 'rgba(168,85,247,.8)', 'rgba(99,99,99,.5)'],
+        borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#999', padding: 14, font: { size: 12 } } } } }
+  });
+
+  // Growth chart (line)
+  const growth = d.dailyGrowth || [];
+  chartInstances.growth = new Chart(document.getElementById('growthChart'), {
+    type: 'line',
+    data: {
+      labels: growth.map(g => g.date || g.day || ''),
+      datasets: [{ label: 'Novos membros', data: growth.map(g => g.count || g.new_users || 0),
+        borderColor: '#22C55E', backgroundColor: 'rgba(34,197,94,.08)', borderWidth: 2,
+        fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#22C55E' }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: '#555', maxTicksLimit: 8 }, grid: { color: 'rgba(255,255,255,.04)' } },
+        y: { ticks: { color: '#555' }, grid: { color: 'rgba(255,255,255,.04)' }, beginAtZero: true } } }
+  });
 }
 
-async function openUserModal(id) {
-  const user = await apiFetch('/admin/users/' + id);
-  document.getElementById('userModalTitle').textContent = 'Editar usuário';
-  document.getElementById('userModalBody').innerHTML = `
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Nome</label><input class="form-input" id="um-name" value="${user.name||''}"></div>
-      <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="${user.email}" disabled style="opacity:.6"></div>
+// ── USERS ─────────────────────────────────────────────────────────
+async function renderUsers(el) {
+  const params = new URLSearchParams({ page: userPage, limit: 20, search: userSearch });
+  if (userFilter === 'active') params.set('active', 'true');
+  if (userFilter === 'inactive') params.set('active', 'false');
+  if (userFilter === 'expiring') params.set('expiring', '7');
+  const d = await apiFetch('/admin/users?' + params);
+  if (!d) return;
+
+  const users = d.users || [];
+  const total = d.total || users.length;
+  const pages = Math.ceil(total / 20);
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-size:20px;font-weight:800">Usuários <span style="font-size:14px;font-weight:400;color:var(--t2)">(${total})</span></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="exportUsersCSV()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar CSV
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleBulkMode()" id="bulkBtn">☑ Selecionar</button>
+      <button class="btn btn-g btn-sm" onclick="openCreateUser()">+ Novo usuário</button>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Plano</label>
-        <select class="form-select" id="um-plan">
-          ${['monthly','annual','lifetime','essencial'].map(p=>`<option value="${p}"${user.plan_type===p?' selected':''}>${p}</option>`).join('')}
-        </select>
+  </div>
+
+  <div class="bulk-bar ${bulkMode && selectedUsers.size ? 'show' : ''}" id="bulkBar">
+    <span style="font-size:13px;font-weight:600" id="bulkCount">${selectedUsers.size} selecionados</span>
+    <div class="bulk-sep"></div>
+    <button class="btn btn-ghost btn-sm" onclick="bulkToggle(true)">✅ Ativar todos</button>
+    <button class="btn btn-ghost btn-sm" onclick="bulkToggle(false)">⬜ Desativar todos</button>
+    <div class="bulk-sep"></div>
+    <button class="btn btn-danger btn-sm" onclick="bulkExtend()">📅 Estender 30 dias</button>
+    <span style="flex:1"></span>
+    <button class="btn btn-ghost btn-sm" onclick="clearBulk()">Cancelar</button>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+      <input class="search-inp" placeholder="Buscar por nome ou email..." value="${userSearch}" oninput="userSearch=this.value;userPage=1;debounce(()=>renderUsers(document.getElementById('mainContent')),300)">
+    </div>
+    <button class="filter-btn ${userFilter==='all'?'on':''}" onclick="setUserFilter('all')">Todos</button>
+    <button class="filter-btn ${userFilter==='active'?'on':''}" onclick="setUserFilter('active')">Ativos</button>
+    <button class="filter-btn ${userFilter==='inactive'?'on':''}" onclick="setUserFilter('inactive')">Inativos</button>
+    <button class="filter-btn ${userFilter==='expiring'?'on':''}" onclick="setUserFilter('expiring')" style="${userFilter==='expiring'?'':'color:var(--r);border-color:rgba(239,68,68,.3)'}">⚠ Expirando</button>
+  </div>
+
+  <div class="section">
+    <table>
+      <thead><tr>
+        ${bulkMode ? '<th><input type="checkbox" onchange="toggleAllUsers(this.checked)"></th>' : ''}
+        <th>Nome</th><th>Email</th><th>Plano</th><th>Expira em</th><th>Status</th><th>Ações</th>
+      </tr></thead>
+      <tbody>${users.map(u => {
+        const exp = u.plan_expires ? new Date(u.plan_expires) : null;
+        const daysLeft = exp ? Math.ceil((exp - Date.now()) / 86400000) : null;
+        const expiryChip = daysLeft !== null ? (daysLeft <= 0 ? '<span class="expiry-chip">Expirado</span>' : daysLeft <= 7 ? `<span class="expiry-chip expiry-soon">${daysLeft}d</span>` : `<span style="color:var(--t2)">${daysLeft}d</span>`) : '—';
+        return `<tr>
+          ${bulkMode ? `<td><input type="checkbox" ${selectedUsers.has(u.id)?'checked':''} onchange="toggleUserSelect('${u.id}',this.checked)"></td>` : ''}
+          <td style="font-weight:600">${u.name || '—'}</td>
+          <td style="color:var(--t2)">${u.email}</td>
+          <td><span class="badge ${u.plan==='anual'?'badge-p':'badge-b'}">${u.plan||'mensal'}</span></td>
+          <td>${expiryChip}</td>
+          <td><span class="badge ${u.active?'badge-g':'badge-r'}">${u.active?'Ativo':'Inativo'}</span></td>
+          <td class="td-actions">
+            <button class="btn btn-ghost btn-sm" onclick="openUserModal('${u.id}')">✏️</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleUser('${u.id}',${!u.active})">${u.active?'Desativar':'Ativar'}</button>
+            <button class="btn btn-ghost btn-sm" onclick="resetPassword('${u.id}')">🔑</button>
+          </td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>
+    <div class="pagination">
+      <div class="page-info">Página ${userPage} de ${pages} (${total} usuários)</div>
+      <div class="page-btns">
+        <button class="page-btn" onclick="userPage--;renderUsers(document.getElementById('mainContent'))" ${userPage<=1?'disabled':''}>← Ant</button>
+        <button class="page-btn" onclick="userPage++;renderUsers(document.getElementById('mainContent'))" ${userPage>=pages?'disabled':''}>Próx →</button>
       </div>
-      <div class="form-group"><label class="form-label">Expira em</label><input class="form-input" type="date" id="um-expires" value="${user.plan_expires||''}"></div>
     </div>
-    <div class="form-group"><label class="form-label">Nome do negócio</label><input class="form-input" id="um-biz" value="${user.biz_name||''}"></div>
-    <div style="background:var(--surface2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-bottom:8px">
-      <strong>Cópias:</strong> ${user.total_copies||0} &nbsp;|&nbsp;
-      <strong>Favoritos:</strong> ${user.total_favorites||0} &nbsp;|&nbsp;
-      <strong>Coleções:</strong> ${user.total_collections||0} &nbsp;|&nbsp;
-      <strong>Último acesso:</strong> ${user.last_login?new Date(user.last_login).toLocaleString('pt-BR'):'Nunca'}
+  </div>`;
+}
+
+function setUserFilter(f) { userFilter = f; userPage = 1; renderUsers(document.getElementById('mainContent')); }
+
+function exportUsersCSV() {
+  apiFetch('/admin/users?limit=9999').then(d => {
+    if (!d) return;
+    const rows = [['Nome','Email','Plano','Ativo','Expira']];
+    (d.users||[]).forEach(u => rows.push([u.name||'',u.email,u.plan||'',u.active?'sim':'não',u.plan_expires||'']));
+    const csv = rows.map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+    a.download = 'usuarios_'+new Date().toISOString().slice(0,10)+'.csv';
+    a.click();
+    toast('CSV exportado!', 'ok');
+  });
+}
+
+function toggleBulkMode() { bulkMode = !bulkMode; selectedUsers.clear(); renderUsers(document.getElementById('mainContent')); }
+function toggleUserSelect(id, checked) { checked ? selectedUsers.add(id) : selectedUsers.delete(id); document.getElementById('bulkCount').textContent = selectedUsers.size + ' selecionados'; document.getElementById('bulkBar').classList.toggle('show', selectedUsers.size > 0); }
+function toggleAllUsers(checked) { document.querySelectorAll('tbody input[type=checkbox]').forEach(cb => { cb.checked = checked; const id = cb.closest('tr').querySelector('button')?.getAttribute('onclick')?.match(/'([^']+)'/)?.[1]; if (id) checked ? selectedUsers.add(id) : selectedUsers.delete(id); }); document.getElementById('bulkCount').textContent = selectedUsers.size + ' selecionados'; document.getElementById('bulkBar').classList.toggle('show', selectedUsers.size > 0); }
+function clearBulk() { bulkMode = false; selectedUsers.clear(); renderUsers(document.getElementById('mainContent')); }
+
+async function bulkToggle(active) {
+  if (!selectedUsers.size) return;
+  if (!confirm(`${active ? 'Ativar' : 'Desativar'} ${selectedUsers.size} usuário(s)?`)) return;
+  await Promise.all([...selectedUsers].map(id => apiFetch('/admin/users/'+id, 'PUT', { active })));
+  toast(selectedUsers.size + ' usuário(s) ' + (active ? 'ativados' : 'desativados'), 'ok');
+  clearBulk();
+}
+
+async function bulkExtend() {
+  if (!selectedUsers.size) return;
+  if (!confirm(`Estender 30 dias para ${selectedUsers.size} usuário(s)?`)) return;
+  await Promise.all([...selectedUsers].map(id => apiFetch('/admin/users/'+id+'/extend', 'POST', { days: 30 })));
+  toast('Prazo estendido!', 'ok');
+  clearBulk();
+}
+
+// ── USERS MODAL ───────────────────────────────────────────────────
+async function openUserModal(id) {
+  const d = await apiFetch('/admin/users/'+id);
+  if (!d) return;
+  const u = d.user || d;
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">Editar usuário</div><button class="modal-x" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="row2">
+      <div class="fg"><label class="fl">Nome</label><input class="fs" id="uName" value="${u.name||''}"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fs" id="uEmail" value="${u.email||''}"></div>
     </div>
-    <div class="form-footer">
-      <button class="btn btn-outline" onclick="resetUserPassword('${id}')">🔐 Resetar senha</button>
-      <button class="btn btn-danger" onclick="toggleUser('${id}',${user.active});closeModal('userModal')">${user.active?'Desativar':'Ativar'} acesso</button>
-      <button class="btn btn-primary" onclick="saveUser('${id}')">Salvar alterações</button>
-    </div>`;
-  document.getElementById('userModal').classList.add('show');
+    <div class="row2">
+      <div class="fg"><label class="fl">Plano</label><select class="fs" id="uPlan"><option value="mensal" ${u.plan==='mensal'?'selected':''}>Mensal</option><option value="anual" ${u.plan==='anual'?'selected':''}>Anual</option></select></div>
+      <div class="fg"><label class="fl">Expira em</label><input class="fs" id="uExpires" type="date" value="${u.plan_expires?u.plan_expires.slice(0,10):''}"></div>
+    </div>
+    <div class="fg"><div class="toggle-row"><div class="tl">Conta ativa</div><label class="toggle-sw"><input type="checkbox" id="uActive" ${u.active?'checked':''}><span class="tslider"></span></label></div></div>
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-g" onclick="saveUser('${id}')">Salvar</button>
+    </div>`);
 }
 
 async function saveUser(id) {
-  await apiFetch('/admin/users/' + id, 'PATCH', {
-    name:        document.getElementById('um-name').value,
-    biz_name:    document.getElementById('um-biz').value,
-    plan_type:   document.getElementById('um-plan').value,
-    plan_expires:document.getElementById('um-expires').value || null,
-  });
-  closeModal('userModal');
-  showToast('✅ Usuário atualizado!');
-  renderTab(CURRENT_TAB);
+  const body = { name: document.getElementById('uName').value.trim(), email: document.getElementById('uEmail').value.trim(), plan: document.getElementById('uPlan').value, plan_expires: document.getElementById('uExpires').value || null, active: document.getElementById('uActive').checked };
+  const d = await apiFetch('/admin/users/'+id, 'PUT', body);
+  if (d?.ok || d?.id || d?.user) { toast('Usuário atualizado!', 'ok'); closeModal(); renderUsers(document.getElementById('mainContent')); }
+  else toast('Erro: '+(d?.error||'?'), 'err');
 }
 
-async function toggleUser(id, currentActive) {
-  await apiFetch('/admin/users/' + id, 'PATCH', { active: !currentActive });
-  showToast(currentActive ? '🔒 Acesso desativado' : '✅ Acesso ativado');
-  renderTab(CURRENT_TAB);
+async function toggleUser(id, active) {
+  await apiFetch('/admin/users/'+id, 'PUT', { active });
+  toast(active ? 'Usuário ativado' : 'Usuário desativado', 'ok');
+  renderUsers(document.getElementById('mainContent'));
 }
 
-async function resetUserPassword(id) {
-  if (!confirm('Enviar email com nova senha temporária para este usuário?')) return;
-  await apiFetch('/admin/users/' + id + '/reset-password', 'POST');
-  showToast('📧 Email de reset enviado!');
+async function resetPassword(id) {
+  if (!confirm('Resetar a senha deste usuário?')) return;
+  const d = await apiFetch('/admin/users/'+id+'/reset-password', 'POST');
+  if (d?.tempPassword) toast('Senha temporária: '+d.tempPassword, 'ok');
+  else toast('Senha resetada — verifique o email do usuário', 'ok');
 }
 
-function openCreateUserModal() {
-  document.getElementById('userModalTitle').textContent = 'Criar usuário manualmente';
-  document.getElementById('userModalBody').innerHTML = `
-    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="cu-email" placeholder="cliente@email.com"></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Nome</label><input class="form-input" id="cu-name" placeholder="Nome do cliente"></div>
-      <div class="form-group"><label class="form-label">Plano</label>
-        <select class="form-select" id="cu-plan">
-          ${['monthly','annual','lifetime','essencial'].map(p=>`<option value="${p}">${p}</option>`).join('')}
-        </select>
-      </div>
+async function openCreateUser() {
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">Criar usuário</div><button class="modal-x" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="row2">
+      <div class="fg"><label class="fl">Nome</label><input class="fs" id="cName" placeholder="Nome completo"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fs" id="cEmail" type="email" placeholder="email@exemplo.com"></div>
     </div>
-    <div style="background:var(--blue-l);border-radius:8px;padding:12px;font-size:12px;color:#1E40AF;margin-bottom:8px">
-      ℹ️ O cliente receberá um email com a senha temporária automaticamente.
+    <div class="row2">
+      <div class="fg"><label class="fl">Plano</label><select class="fs" id="cPlan"><option value="mensal">Mensal</option><option value="anual">Anual</option></select></div>
+      <div class="fg"><label class="fl">Expira em</label><input class="fs" id="cExpires" type="date"></div>
     </div>
-    <div class="form-footer">
-      <button class="btn btn-outline" onclick="closeModal('userModal')">Cancelar</button>
-      <button class="btn btn-primary" onclick="createUser()">Criar e enviar email</button>
-    </div>`;
-  document.getElementById('userModal').classList.add('show');
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-g" onclick="createUser()">Criar</button>
+    </div>`);
 }
 
 async function createUser() {
-  const email = document.getElementById('cu-email').value;
-  const name  = document.getElementById('cu-name').value;
-  const plan  = document.getElementById('cu-plan').value;
-  if (!email) return showToast('Email obrigatório');
-  await apiFetch('/admin/users', 'POST', { email, name, plan_type: plan });
-  closeModal('userModal');
-  showToast('✅ Usuário criado e email enviado!');
-  renderTab(CURRENT_TAB);
+  const body = { name: document.getElementById('cName').value.trim(), email: document.getElementById('cEmail').value.trim(), plan: document.getElementById('cPlan').value, plan_expires: document.getElementById('cExpires').value || null };
+  if (!body.name || !body.email) { toast('Nome e email obrigatórios', 'err'); return; }
+  const d = await apiFetch('/admin/users', 'POST', body);
+  if (d?.ok || d?.id || d?.user) { toast('Usuário criado!', 'ok'); closeModal(); renderUsers(document.getElementById('mainContent')); }
+  else toast('Erro: '+(d?.error||'?'), 'err');
 }
 
-// ═══════════════════════════════════════
-// SCRIPTS
-// ═══════════════════════════════════════
-async function renderScripts(main) {
-  const { scripts } = await apiFetch('/admin/scripts');
+// ── SCRIPTS ───────────────────────────────────────────────────────
+async function renderScripts(el) {
+  const params = new URLSearchParams({ page: scriptPage, limit: 20, search: scriptSearch });
+  const d = await apiFetch('/admin/scripts?' + params);
+  if (!d) return;
+  const scripts = d.scripts || [];
+  const total = d.total || scripts.length;
 
-  main.innerHTML = `
-    <div class="fade-in">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <div class="page-title">Scripts <span style="font-size:14px;font-weight:500;color:var(--text3)">(${scripts.length})</span></div>
-        <button class="btn btn-dark" onclick="openScriptModal()">+ Novo script</button>
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-size:20px;font-weight:800">Scripts <span style="font-size:14px;font-weight:400;color:var(--t2)">(${total})</span></div>
+    <button class="btn btn-g btn-sm" onclick="openScriptModal(null)">+ Novo script</button>
+  </div>
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+      <input class="search-inp" placeholder="Buscar scripts..." value="${scriptSearch}" oninput="scriptSearch=this.value;scriptPage=1;debounce(()=>renderScripts(document.getElementById('mainContent')),300)">
+    </div>
+  </div>
+  <div class="section">
+    <table>
+      <thead><tr><th>Título</th><th>Nicho</th><th>Situação</th><th>Destaque</th><th>Status</th><th>Ações</th></tr></thead>
+      <tbody>${scripts.map(s => `<tr>
+        <td style="font-weight:600;max-width:280px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.title||'—'}</div></td>
+        <td><span class="badge badge-b">${s.niche||s.nicho||'—'}</span></td>
+        <td style="color:var(--t2);max-width:200px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.situation||s.situacao||'—'}</div></td>
+        <td>${s.featured?'⭐':'—'}</td>
+        <td><span class="badge ${s.active?'badge-g':'badge-r'}">${s.active?'Ativo':'Inativo'}</span></td>
+        <td class="td-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openScriptModal('${s.id}')">✏️ Editar</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleScript('${s.id}',${!s.active})">${s.active?'Desativar':'Ativar'}</button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleFeatured('${s.id}',${!s.featured})">${s.featured?'Remover ⭐':'Destacar ⭐'}</button>
+        </td>
+      </tr>`).join('')}</tbody>
+    </table>
+    <div class="pagination">
+      <div class="page-info">Página ${scriptPage} de ${Math.ceil(total/20)}</div>
+      <div class="page-btns">
+        <button class="page-btn" onclick="scriptPage--;renderScripts(document.getElementById('mainContent'))" ${scriptPage<=1?'disabled':''}>← Ant</button>
+        <button class="page-btn" onclick="scriptPage++;renderScripts(document.getElementById('mainContent'))" ${scriptPage>=Math.ceil(total/20)?'disabled':''}>Próx →</button>
       </div>
-      <div class="page-sub">Adicione, edite e desative scripts em tempo real — aparecem para todos os usuários instantaneamente</div>
-      <div class="card tbl-wrap">
-        <table><thead><tr><th>ID</th><th>Etapa</th><th>Nicho</th><th>Situação</th><th>Cópias</th><th>👍</th><th>👎</th><th>Destaque</th><th>Status</th><th>Ações</th></tr></thead>
-        <tbody>${scripts.map(s=>`
-          <tr>
-            <td><code style="font-size:11px">${s.id}</code></td>
-            <td><span class="badge badge-blue">${s.etapa}</span></td>
-            <td style="font-size:12px">${s.nicho}</td>
-            <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><strong>${s.sit}</strong></td>
-            <td>${s.total_copies||0}</td>
-            <td style="color:var(--wa)">${s.thumbs_up||0}</td>
-            <td style="color:var(--red)">${s.thumbs_down||0}</td>
-            <td><div class="toggle${s.featured?' on':''}" onclick="toggleFeatured('${s.id}',${s.featured})"></div></td>
-            <td><span class="badge ${s.active?'badge-green':'badge-red'}">${s.active?'Ativo':'Inativo'}</span></td>
-            <td>
-              <div style="display:flex;gap:5px">
-                <button class="btn btn-outline btn-sm" onclick="openScriptModal('${s.id}')">Editar</button>
-                <button class="btn btn-sm btn-danger" onclick="toggleScript('${s.id}',${s.active})">${s.active?'Ocultar':'Ativar'}</button>
-              </div>
-            </td>
-          </tr>`).join('')}
-        </tbody></table>
-      </div>
-    </div>`;
+    </div>
+  </div>`;
 }
 
-async function openScriptModal(id = null) {
-  let script = null;
-  if (id) script = await apiFetch('/admin/scripts').then(d => d.scripts.find(s => s.id === id));
-
-  document.getElementById('scriptModalTitle').textContent = id ? 'Editar script' : 'Novo script';
-  document.getElementById('scriptModalBody').innerHTML = `
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">ID único</label><input class="form-input" id="sm-id" value="${script?.id||''}" placeholder="Ex: D10" ${id?'disabled style="opacity:.6"':''}></div>
-      <div class="form-group"><label class="form-label">Etapa</label>
-        <select class="form-select" id="sm-etapa">
-          ${['Abertura','Qualificação','Apresentação','Objeção','Fechamento','Pós-venda','Reativação','Stories/Status'].map(e=>`<option ${script?.etapa===e?'selected':''}>${e}</option>`).join('')}
-        </select>
-      </div>
+async function openScriptModal(id) {
+  let s = {};
+  if (id) { const d = await apiFetch('/admin/scripts/'+id); s = d?.script || d || {}; }
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">${id?'Editar':'Novo'} script</div><button class="modal-x" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="fg"><label class="fl">Título</label><input class="fs" id="sTitle" value="${s.title||''}"></div>
+    <div class="row2">
+      <div class="fg"><label class="fl">Nicho</label><input class="fs" id="sNiche" value="${s.niche||s.nicho||''}"></div>
+      <div class="fg"><label class="fl">Situação</label><input class="fs" id="sSit" value="${s.situation||s.situacao||''}"></div>
     </div>
-    <div class="form-group"><label class="form-label">Nicho</label>
-      <select class="form-select" id="sm-nicho">
-        ${['Todos','Delivery','Salão de Beleza','Clínica','Loja de Roupas','Imobiliária','Serviços','Vendas Online','Revendedor'].map(n=>`<option ${script?.nicho===n?'selected':''}>${n}</option>`).join('')}
-      </select>
+    <div class="fg"><label class="fl">Mensagem / Script</label><textarea class="fs" id="sMsg" rows="5">${s.msg||s.message||''}</textarea></div>
+    <div class="row2">
+      <div class="fg"><div class="toggle-row"><div class="tl">Ativo</div><label class="toggle-sw"><input type="checkbox" id="sActive" ${s.active!==false?'checked':''}><span class="tslider"></span></label></div></div>
+      <div class="fg"><div class="toggle-row"><div class="tl">Destaque</div><label class="toggle-sw"><input type="checkbox" id="sFeat" ${s.featured?'checked':''}><span class="tslider"></span></label></div></div>
     </div>
-    <div class="form-group"><label class="form-label">Situação (título do script)</label><input class="form-input" id="sm-sit" value="${script?.sit||''}" placeholder="Ex: Cliente diz tá caro"></div>
-    <div class="form-group"><label class="form-label">Mensagem — use *texto* para negrito</label><textarea class="form-textarea" id="sm-msg" style="min-height:140px">${script?.msg||''}</textarea></div>
-    <div class="form-group"><label class="form-label">Dica estratégica (opcional)</label><input class="form-input" id="sm-tip" value="${script?.tip||''}" placeholder="Dica para o vendedor"></div>
-    <div class="form-footer">
-      <button class="btn btn-outline" onclick="closeModal('scriptModal')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveScript(${id?`'${id}'`:'null'})">${id?'Salvar alterações':'Criar script'}</button>
-    </div>`;
-  document.getElementById('scriptModal').classList.add('show');
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-g" onclick="saveScript(${id?'"'+id+'"':'null'})">Salvar</button>
+    </div>`);
 }
 
 async function saveScript(id) {
-  const body = {
-    id:    document.getElementById('sm-id').value,
-    etapa: document.getElementById('sm-etapa').value,
-    nicho: document.getElementById('sm-nicho').value,
-    sit:   document.getElementById('sm-sit').value,
-    msg:   document.getElementById('sm-msg').value,
-    tip:   document.getElementById('sm-tip').value || null,
-  };
-  if (!body.sit || !body.msg) return showToast('Situação e mensagem são obrigatórios');
-  if (id) {
-    await apiFetch('/admin/scripts/' + id, 'PATCH', body);
-    showToast('✅ Script atualizado!');
-  } else {
-    await apiFetch('/admin/scripts', 'POST', body);
-    showToast('✅ Script criado e disponível para todos os usuários!');
-  }
-  closeModal('scriptModal');
-  renderTab(CURRENT_TAB);
+  const body = { title: document.getElementById('sTitle').value.trim(), niche: document.getElementById('sNiche').value.trim(), situation: document.getElementById('sSit').value.trim(), msg: document.getElementById('sMsg').value.trim(), active: document.getElementById('sActive').checked, featured: document.getElementById('sFeat').checked };
+  const d = id ? await apiFetch('/admin/scripts/'+id, 'PUT', body) : await apiFetch('/admin/scripts', 'POST', body);
+  if (d?.ok || d?.id || d?.script) { toast(id ? 'Script atualizado!' : 'Script criado!', 'ok'); closeModal(); renderScripts(document.getElementById('mainContent')); }
+  else toast('Erro: '+(d?.error||'?'), 'err');
 }
 
-async function toggleScript(id, active) {
-  await apiFetch('/admin/scripts/' + id, 'PATCH', { active: !active });
-  showToast(active ? '🔒 Script ocultado' : '✅ Script ativado');
-  renderTab(CURRENT_TAB);
-}
+async function toggleScript(id, active) { await apiFetch('/admin/scripts/'+id, 'PUT', { active }); toast(active ? 'Script ativado' : 'Script desativado', 'ok'); renderScripts(document.getElementById('mainContent')); }
+async function toggleFeatured(id, featured) { await apiFetch('/admin/scripts/'+id, 'PUT', { featured }); toast(featured ? 'Adicionado aos destaques' : 'Removido dos destaques', 'ok'); renderScripts(document.getElementById('mainContent')); }
 
-async function toggleFeatured(id, featured) {
-  await apiFetch('/admin/scripts/' + id, 'PATCH', { featured: !featured });
-  showToast(!featured ? '⭐ Script em destaque!' : 'Script removido do destaque');
-  renderTab(CURRENT_TAB);
-}
+// ── METRICS ───────────────────────────────────────────────────────
+async function renderMetrics(el) {
+  const d = await apiFetch('/admin/metrics?days='+metricsDays);
+  if (!d) return;
 
-// ═══════════════════════════════════════
-// METRICS
-// ═══════════════════════════════════════
-async function renderMetrics(main) {
-  const data = await apiFetch('/admin/metrics?days=30');
-  const { topScripts, planDistribution } = data;
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+    <div style="font-size:20px;font-weight:800">Métricas</div>
+    <div style="display:flex;gap:6px">
+      ${[7,30,90].map(d => `<button class="period-btn ${metricsDays===d?'on':''}" onclick="metricsDays=${d};renderMetrics(document.getElementById('mainContent'))">${d}d</button>`).join('')}
+    </div>
+  </div>
 
-  main.innerHTML = `
-    <div class="fade-in">
-      <div class="page-title">Métricas globais</div>
-      <div class="page-sub">Dados dos últimos 30 dias</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="card">
-          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Scripts mais copiados</div>
-          ${(topScripts||[]).map((s,i)=>`
-            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
-              <span style="font-size:12px;font-weight:800;color:var(--text3);min-width:20px">${i+1}</span>
-              <div style="flex:1;min-width:0">
-                <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.sit}</div>
-                <div style="font-size:10px;color:var(--text3)">${s.etapa} · 👍 ${s.thumbs_up||0} 👎 ${s.thumbs_down||0}</div>
-              </div>
-              <span class="badge badge-green">${s.total_copies} cópias</span>
-            </div>`).join('')||'<div style="color:var(--text3);font-size:13px">Sem dados</div>'}
-        </div>
-        <div class="card">
-          <div style="font-size:13px;font-weight:700;margin-bottom:14px">Distribuição por plano</div>
-          ${Object.entries(planDistribution||{}).map(([plan,count])=>`
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-              <span style="font-size:13px;font-weight:600">${plan}</span>
-              <span class="badge badge-blue">${count} usuários</span>
-            </div>`).join('')||'<div style="color:var(--text3);font-size:13px">Sem dados</div>'}
-        </div>
-      </div>
-    </div>`;
-}
+  <div class="sec-row">
+    <div class="section">
+      <div class="sec-head"><div class="sec-title">Scripts mais copiados</div></div>
+      <div class="sec-body"><div class="chart-wrap"><canvas id="topChart"></canvas></div></div>
+    </div>
+    <div class="section">
+      <div class="sec-head"><div class="sec-title">Nichos mais usados</div></div>
+      <div class="sec-body"><div class="chart-wrap"><canvas id="nicheChart"></canvas></div></div>
+    </div>
+  </div>
 
-// ═══════════════════════════════════════
-// WEBHOOKS
-// ═══════════════════════════════════════
-async function renderWebhooks(main) {
-  main.innerHTML = `
-    <div class="fade-in">
-      <div class="page-title">Configuração do Webhook</div>
-      <div class="page-sub">Configure a Kiwify para enviar eventos automaticamente ao seu servidor</div>
-      <div class="card" style="margin-bottom:16px">
-        <div style="font-size:13px;font-weight:700;margin-bottom:16px">🔗 URLs do Webhook</div>
-        <div class="form-group">
-          <label class="form-label">URL — Compra aprovada</label>
-          <div style="display:flex;gap:8px">
-            <input class="form-input" value="${API}/webhook/kiwify?token=SEU_TOKEN" readonly style="font-family:monospace;font-size:12px">
-            <button class="btn btn-outline" onclick="navigator.clipboard.writeText('${API}/webhook/kiwify?token=SEU_TOKEN');showToast('✅ URL copiada!')">Copiar</button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">URL — Cancelamento</label>
-          <div style="display:flex;gap:8px">
-            <input class="form-input" value="${API}/webhook/kiwify-cancel?token=SEU_TOKEN" readonly style="font-family:monospace;font-size:12px">
-            <button class="btn btn-outline" onclick="navigator.clipboard.writeText('${API}/webhook/kiwify-cancel?token=SEU_TOKEN');showToast('✅ URL copiada!')">Copiar</button>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div style="font-size:13px;font-weight:700;margin-bottom:14px">📋 Passo a passo — Kiwify</div>
-        ${[
-          'Acesse sua conta na Kiwify',
-          'Vá em Produtos → selecione o produto',
-          'Clique em "Configurações" → "Webhooks"',
-          'Cole a URL de compra aprovada no campo correspondente',
-          'No campo "Token de segurança", coloque o valor de KIWIFY_WEBHOOK_TOKEN do seu .env',
-          'Clique em Salvar e faça uma compra teste',
-          'Repita para o produto de cancelamento',
-        ].map((s,i)=>`
-          <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000;flex-shrink:0">${i+1}</div>
-            <div style="font-size:13px;color:var(--text2)">${s}</div>
+  <div class="sec-row">
+    <div class="section">
+      <div class="sec-head"><div class="sec-title">Planos ativos</div></div>
+      <div class="sec-body">
+        ${Object.entries(d.byPlan||{}).map(([plan,count]) => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--b)">
+            <span class="badge ${plan==='anual'?'badge-p':'badge-b'}">${plan}</span>
+            <span style="font-size:18px;font-weight:800">${count}</span>
           </div>`).join('')}
       </div>
-    </div>`;
+    </div>
+    <div class="section">
+      <div class="sec-head"><div class="sec-title">Resumo do período (${metricsDays} dias)</div></div>
+      <div class="sec-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="stat"><div class="stat-label">Scripts copiados</div><div class="stat-val">${d.totalCopies||'—'}</div></div>
+          <div class="stat"><div class="stat-label">Usuários ativos</div><div class="stat-val">${d.activeUsers||'—'}</div></div>
+          <div class="stat"><div class="stat-label">Novos membros</div><div class="stat-val">${d.newUsers||'—'}</div></div>
+          <div class="stat"><div class="stat-label">Taxa de retenção</div><div class="stat-val">${d.retention||'—'}${d.retention?'%':''}</div></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  // Top scripts bar chart
+  const topScripts = (d.topScripts || []).slice(0, 8);
+  chartInstances.top = new Chart(document.getElementById('topChart'), {
+    type: 'bar',
+    data: {
+      labels: topScripts.map(s => s.title ? s.title.substring(0, 25) + (s.title.length > 25 ? '…' : '') : '?'),
+      datasets: [{ data: topScripts.map(s => s.copies || s.count || 0), backgroundColor: 'rgba(34,197,94,.7)', borderRadius: 4 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#555', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#555' }, grid: { color: 'rgba(255,255,255,.04)' }, beginAtZero: true } } }
+  });
+
+  // Niches donut
+  const nicheData = d.byNiche || {};
+  const nicheKeys = Object.keys(nicheData).slice(0, 8);
+  const colors = ['rgba(59,130,246,.8)','rgba(168,85,247,.8)','rgba(34,197,94,.8)','rgba(245,158,11,.8)','rgba(239,68,68,.8)','rgba(20,184,166,.8)','rgba(249,115,22,.8)','rgba(236,72,153,.8)'];
+  chartInstances.niche = new Chart(document.getElementById('nicheChart'), {
+    type: 'doughnut',
+    data: { labels: nicheKeys, datasets: [{ data: nicheKeys.map(k => nicheData[k]), backgroundColor: colors, borderWidth: 0, hoverOffset: 6 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#999', padding: 12, font: { size: 11 } } } } }
+  });
 }
 
-// ═══════════════════════════════════════
-// UTILS
-// ═══════════════════════════════════════
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+// ── CONTEÚDO (admin-members integrated) ──────────────────────────
+async function renderConteudo(el) {
+  const d = await apiFetch('/members-content/admin/list');
+  const items = d?.items || [];
+  const pub = items.filter(i => i.published).length;
+  const cats = new Set(items.map(i => i.category).filter(Boolean)).size;
 
-let toastT;
-function showToast(msg) {
+  const filtered = items.filter(i => {
+    if (contentFilter === 'draft' && i.published) return false;
+    if (!['all','draft'].includes(contentFilter) && i.type !== contentFilter) return false;
+    if (contentSearch && !i.title.toLowerCase().includes(contentSearch.toLowerCase()) && !(i.category||'').toLowerCase().includes(contentSearch.toLowerCase())) return false;
+    return true;
+  });
+
+  const typeIcons = {article:'📄',template:'📋',guide:'📖',video:'🎥'};
+  const typeBadges = {article:'badge-g',template:'badge-b',guide:'badge-o',video:'badge-r'};
+  const typeLabels = {article:'Artigo',template:'Template',guide:'Guia',video:'Vídeo'};
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+    <div style="font-size:20px;font-weight:800">Conteúdo Exclusivo</div>
+    <button class="btn btn-g btn-sm" onclick="openContentModal(null)">+ Novo conteúdo</button>
+  </div>
+
+  <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-val">${items.length}</div></div>
+    <div class="stat"><div class="stat-label">Publicados</div><div class="stat-val" style="color:var(--g)">${pub}</div></div>
+    <div class="stat"><div class="stat-label">Rascunhos</div><div class="stat-val" style="color:var(--o)">${items.length - pub}</div></div>
+    <div class="stat"><div class="stat-label">Categorias</div><div class="stat-val">${cats}</div></div>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+      <input class="search-inp" placeholder="Buscar conteúdo..." value="${contentSearch}" oninput="contentSearch=this.value;renderConteudo(document.getElementById('mainContent'))">
+    </div>
+    <button class="filter-btn ${contentFilter==='all'?'on':''}" onclick="contentFilter='all';renderConteudo(document.getElementById('mainContent'))">Todos</button>
+    <button class="filter-btn ${contentFilter==='article'?'on':''}" onclick="contentFilter='article';renderConteudo(document.getElementById('mainContent'))">Artigos</button>
+    <button class="filter-btn ${contentFilter==='template'?'on':''}" onclick="contentFilter='template';renderConteudo(document.getElementById('mainContent'))">Templates</button>
+    <button class="filter-btn ${contentFilter==='guide'?'on':''}" onclick="contentFilter='guide';renderConteudo(document.getElementById('mainContent'))">Guias</button>
+    <button class="filter-btn ${contentFilter==='video'?'on':''}" onclick="contentFilter='video';renderConteudo(document.getElementById('mainContent'))">Vídeos</button>
+    <button class="filter-btn ${contentFilter==='draft'?'on':''}" onclick="contentFilter='draft';renderConteudo(document.getElementById('mainContent'))">Rascunhos</button>
+  </div>
+
+  <div class="content-grid">${filtered.length ? filtered.map(i => `
+    <div class="content-card">
+      <div class="cc-thumb">
+        ${i.thumbnail ? `<img src="${i.thumbnail}" onerror="this.style.display='none'">` : `<span>${typeIcons[i.type]||'📄'}</span>`}
+        <span class="badge ${typeBadges[i.type]||'badge-g'}" style="position:absolute;top:8px;right:8px">${typeLabels[i.type]||'Artigo'}</span>
+        <span style="position:absolute;bottom:8px;right:8px;width:8px;height:8px;border-radius:50%;background:${i.published?'var(--g)':'var(--t3)'}${i.published?';box-shadow:0 0 6px var(--g)':''}"></span>
+      </div>
+      <div class="cc-body">
+        ${i.category ? `<div class="cc-cat">${i.category}</div>` : ''}
+        <div class="cc-title">${i.title}</div>
+        ${i.description ? `<div class="cc-desc">${i.description}</div>` : ''}
+        <div class="cc-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openContentModal('${i.id}')">✏️ Editar</button>
+          <button class="btn ${i.published?'btn-ghost':'btn-g'} btn-sm" onclick="toggleContentPub('${i.id}',${!i.published})">${i.published?'⬜ Rascunho':'✅ Publicar'}</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteContent('${i.id}')">🗑</button>
+        </div>
+      </div>
+    </div>`) .join('') : '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--t2)">Nenhum conteúdo encontrado</div>'}
+  </div>`;
+}
+
+async function openContentModal(id) {
+  let item = {};
+  if (id) { const d = await apiFetch('/members-content/admin/'+id); item = d?.item || d || {}; }
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">${id?'Editar':'Novo'} conteúdo</div><button class="modal-x" onclick="closeModal()"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="row2">
+      <div class="fg"><label class="fl">Tipo</label><select class="fs" id="ctType"><option value="article" ${item.type==='article'?'selected':''}>📄 Artigo</option><option value="template" ${item.type==='template'?'selected':''}>📋 Template</option><option value="guide" ${item.type==='guide'?'selected':''}>📖 Guia</option><option value="video" ${item.type==='video'?'selected':''}>🎥 Vídeo</option></select></div>
+      <div class="fg"><label class="fl">Categoria</label><input class="fs" id="ctCat" value="${item.category||''}" placeholder="ex: vendas, objeções"></div>
+    </div>
+    <div class="fg"><label class="fl">Título</label><input class="fs" id="ctTitle" value="${item.title||''}" placeholder="Título do conteúdo"></div>
+    <div class="fg"><label class="fl">Descrição</label><textarea class="fs" id="ctDesc" rows="2" placeholder="Resumo que aparece no card...">${item.description||''}</textarea></div>
+    <div class="fg"><label class="fl">Conteúdo</label><textarea class="fs" id="ctContent" rows="5" placeholder="Conteúdo completo...">${item.content||''}</textarea></div>
+    <div class="row2">
+      <div class="fg"><label class="fl">Thumbnail URL</label><input class="fs" id="ctThumb" value="${item.thumbnail||''}" placeholder="https://..."></div>
+      <div class="fg"><label class="fl">Ordem</label><input class="fs" id="ctOrder" type="number" value="${item.order_index||0}"></div>
+    </div>
+    <div class="fg"><div class="toggle-row"><div class="tl">Publicado</div><label class="toggle-sw"><input type="checkbox" id="ctPub" ${item.published?'checked':''}><span class="tslider"></span></label></div></div>
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-g" onclick="saveContent(${id?'"'+id+'"':'null'})">Salvar</button>
+    </div>`, '720px');
+}
+
+async function saveContent(id) {
+  const body = { type: document.getElementById('ctType').value, category: document.getElementById('ctCat').value.trim(), title: document.getElementById('ctTitle').value.trim(), description: document.getElementById('ctDesc').value.trim(), content: document.getElementById('ctContent').value.trim(), thumbnail: document.getElementById('ctThumb').value.trim(), order_index: parseInt(document.getElementById('ctOrder').value)||0, published: document.getElementById('ctPub').checked };
+  if (!body.title) { toast('Título obrigatório', 'err'); return; }
+  const d = id ? await apiFetch('/members-content/admin/'+id, 'PUT', body) : await apiFetch('/members-content/admin', 'POST', body);
+  if (d?.ok || d?.id || d?.item) { toast(id?'Conteúdo atualizado!':'Conteúdo criado!', 'ok'); closeModal(); renderConteudo(document.getElementById('mainContent')); }
+  else toast('Erro: '+(d?.error||'?'), 'err');
+}
+
+async function toggleContentPub(id, pub) {
+  await apiFetch('/members-content/admin/'+id, 'PUT', { published: pub });
+  toast(pub ? 'Publicado!' : 'Movido para rascunho', 'ok');
+  renderConteudo(document.getElementById('mainContent'));
+}
+
+async function deleteContent(id) {
+  if (!confirm('Deletar este conteúdo?')) return;
+  await apiFetch('/members-content/admin/'+id, 'DELETE');
+  toast('Conteúdo deletado', 'ok');
+  renderConteudo(document.getElementById('mainContent'));
+}
+
+// ── CRONS ─────────────────────────────────────────────────────────
+async function renderCrons(el) {
+  const crons = [
+    { key: 'email-sequence', name: 'Sequência de Emails', desc: 'Dispara emails da sequência PDF (dias 2, 5, 8)', schedule: 'Todo dia 8h' },
+    { key: 'onboarding', name: 'Onboarding PRO', desc: 'Emails de boas-vindas para novos membros PRO (dias 1, 3, 7)', schedule: 'Todo dia 9h' },
+    { key: 'abandoned-cart', name: 'Carrinho Abandonado', desc: 'Emails de recuperação (1h e 24h após abandono)', schedule: 'A cada 30min' },
+    { key: 'annual-upsell', name: 'Upsell Anual', desc: 'Oferta de upgrade para plano anual (dia 30)', schedule: 'Todo dia 10h' },
+    { key: 'check-renewals', name: 'Verificar Renovações', desc: 'Desativa usuários com plano vencido e envia alerta', schedule: 'Todo dia 6h' },
+    { key: 'backup', name: 'Backup do Banco', desc: 'Exporta dados críticos para armazenamento seguro', schedule: 'Todo domingo 2h' },
+  ];
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-size:20px;font-weight:800">Cron Jobs</div>
+    <div style="font-size:12px;color:var(--t2)">Clique em "Executar" para rodar manualmente</div>
+  </div>
+  <div class="cron-grid">
+    ${crons.map(c => `
+    <div class="cron-card">
+      <div class="cron-info">
+        <div class="cron-name">${c.name}</div>
+        <div class="cron-desc">${c.desc}</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:3px">${c.schedule}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+        <div class="cron-status" id="cron-dot-${c.key}"></div>
+        <button class="btn btn-ghost btn-sm" onclick="runCron('${c.key}',this)">▶ Executar</button>
+      </div>
+    </div>`).join('')}
+  </div>
+
+  <div class="section" style="margin-top:16px">
+    <div class="sec-head"><div class="sec-title">Log de execuções recentes</div></div>
+    <div class="sec-body" id="cronLog" style="font-family:monospace;font-size:12px;color:var(--t2);min-height:60px">
+      <div style="color:var(--t3)">Execute um cron para ver o resultado aqui...</div>
+    </div>
+  </div>`;
+}
+
+async function runCron(key, btn) {
+  const dot = document.getElementById('cron-dot-'+key);
+  const log = document.getElementById('cronLog');
+  btn.disabled = true; btn.textContent = '⏳ Rodando...';
+  if (dot) { dot.classList.add('running'); }
+  const start = Date.now();
+  try {
+    const d = await apiFetch('/cron/'+key, 'POST');
+    const elapsed = ((Date.now()-start)/1000).toFixed(1);
+    const result = d?.message || d?.result || JSON.stringify(d);
+    const line = document.createElement('div');
+    line.style.cssText = 'padding:6px 0;border-bottom:1px solid var(--b)';
+    line.innerHTML = `<span style="color:var(--g)">✓</span> <strong>${key}</strong> — ${result} <span style="color:var(--t3)">(${elapsed}s)</span>`;
+    if (log.querySelector('div[style*="var(--t3)"]')) log.innerHTML = '';
+    log.prepend(line);
+    toast('Cron executado!', 'ok');
+  } catch(e) {
+    toast('Erro: '+e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = '▶ Executar';
+    if (dot) { dot.classList.remove('running'); }
+  }
+}
+
+// ── WEBHOOKS ──────────────────────────────────────────────────────
+async function renderWebhooks(el) {
+  const d = await apiFetch('/admin/webhooks?limit=50');
+  if (!d) return;
+  const logs = d.logs || d.webhooks || [];
+
+  el.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-size:20px;font-weight:800">Webhooks</div>
+    <button class="btn btn-ghost btn-sm" onclick="renderWebhooks(document.getElementById('mainContent'))">↻ Atualizar</button>
+  </div>
+  <div class="section">
+    <table>
+      <thead><tr><th>Evento</th><th>Email</th><th>Status</th><th>Data</th><th>Detalhes</th></tr></thead>
+      <tbody>${logs.map(w => `<tr>
+        <td><span class="badge badge-b">${w.event_type||w.event||'—'}</span></td>
+        <td style="color:var(--t2)">${w.email||w.customer_email||'—'}</td>
+        <td><span class="badge ${w.processed||w.status==='ok'?'badge-g':'badge-o'}">${w.processed||w.status==='ok'?'OK':'Pendente'}</span></td>
+        <td style="color:var(--t2)">${w.created_at?new Date(w.created_at).toLocaleString('pt-BR'):'—'}</td>
+        <td style="font-size:11px;color:var(--t3);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${w.payload?JSON.stringify(w.payload).substring(0,60)+'…':'—'}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>`;
+}
+
+// ── MODAL HELPERS ────────────────────────────────────────────────
+function openModal(html, maxW = '560px') {
+  const box = document.getElementById('modalBox');
+  box.style.maxWidth = maxW;
+  box.innerHTML = html;
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+document.getElementById('overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function toast(msg, type = 'ok') {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastT);
-  toastT = setTimeout(() => t.classList.remove('show'), 2500);
+  t.textContent = msg; t.className = 'toast show ' + type;
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-let debounceT;
-function debounce(fn, delay) { clearTimeout(debounceT); debounceT = setTimeout(fn, delay); }
+// ── UTILS ─────────────────────────────────────────────────────────
+let _dt; function debounce(fn, ms) { clearTimeout(_dt); _dt = setTimeout(fn, ms); }
 </script>
 </body>
 </html>
