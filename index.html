@@ -259,7 +259,7 @@ async function doLogin() {
   if (!email || !pass) { err.textContent = 'Preencha todos os campos'; err.style.display = 'block'; return; }
   btn.textContent = 'Entrando...'; btn.disabled = true;
   try {
-    const d = await apiFetch('/admin/login', 'POST', { email, password: pass });
+    const d = await apiFetch('/auth/admin-login', 'POST', { email, password: pass });
     if (!d || !d.token) throw new Error(d?.error || 'Credenciais inválidas');
     TOKEN = d.token; ADMIN = d.admin;
     localStorage.setItem('csa_token', TOKEN);
